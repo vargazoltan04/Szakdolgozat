@@ -5,13 +5,10 @@ cv2.namedWindow("input", cv2.WINDOW_NORMAL)
 cv2.imshow("input", image)
 
 image_gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-cv2.namedWindow("GRAY", cv2.WINDOW_NORMAL)
-cv2.imshow("GRAY", image_gray)
 
 _, image_binary = cv2.threshold(image_gray, 128, 255, cv2.THRESH_BINARY)
 cv2.namedWindow("BINARY", cv2.WINDOW_NORMAL)
 cv2.imshow("BINARY", image_binary)
 
-cv2.imwrite("../images/output/test_gray.png", image_gray)
-cv2.imwrite("../images/output/test_binary.png", image_binary)
+cv2.imwrite("../images/binarized_image/test_binary.png", image_binary)
 cv2.waitKey(0)
