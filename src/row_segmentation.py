@@ -2,20 +2,17 @@ import cv2
 import matplotlib.pyplot as plt
 import scipy.signal
 import utility
+import numpy as np
 
-#Megkeresi a minimumpontokat egy tömbben (csak akkor találja meg, ha azok 0-k)
-#ha több van közvetlen egymás mellett, akkor a legutolsó pontot találja meg
-
-
-image = cv2.imread("../images/binarized_image/test_binary.png")
-image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-
-#vízszintes vetület
-horizontal_projection = []
+#Kép beolvasás
+image_color = cv2.imread("../images/binarized_image/test_binary.png")
+image = cv2.cvtColor(image_color, cv2.COLOR_BGR2GRAY)
 
 height, width = image.shape
 
+#vízszintes vetület
 #végigiterálok a sorokon, és kiszámolom hogy soronként hány fekete pixel van
+horizontal_projection = []
 for row in range(height):
     row_data = image[row, :]
 
@@ -26,19 +23,23 @@ for row in range(height):
 
     horizontal_projection.append(count_black_pixels)
 
-#visszaalakítom a képet "színesre", hogy a vonalakat bele tudjam húzni
-image = cv2.cvtColor(image, cv2.COLOR_GRAY2BGR)
-
+#lokális minimumpontok megkeresése (sorközök), és piros vonalak behúzása a képre
+#Ez nem fontos, de látszik a képen, ha hiba van rajta, mivel vizuális. 
 min_points = utility.find_local_minimum_points(horizontal_projection)
-row_image = []
 for i in range(len(min_points) - 1):
-    cv2.line(image, (0, min_points[i]), (width, min_points[i]), (0,0,255), 1)
+    cv2.line(image_color, (0, min_points[i]), (width, min_points[i]), (0,0,255), 1)
 
-
-cv2.imwrite(f"../images/horizontal_segmented/row0.png", image[0:min_points[0], :, :])
+#Többi sor, illetve fehér sorok törlése
+#Ez azért van külön az első sortól, mert mivel a 
 for i in range(1, len(min_points)):
-    cv2.imwrite(f"../images/horizontal_segmented/row{i}.png", image[min_points[i-1]:min_points[i], :, :])
-cv2.imshow("rows", image)
+    row_image = image[min_points[i-1]:min_points[i], :]
+    non_white_rows = np.any(row_image < 255, axis=1)
+    row_image_trimmed = row_image[non_white_rows]
+    cv2.imwrite(f"../images/rows/row{i}.png", row_image_trimmed)
+
+
+
+cv2.imshow("rows", image_color)
 
 plt.plot(horizontal_projection)
 plt.title("Horizontal projection")

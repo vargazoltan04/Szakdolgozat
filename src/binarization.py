@@ -1,6 +1,6 @@
 import cv2
 
-image = cv2.imread("../images/input/test01_low_quality.png")
+image = cv2.imread("../images/input/test01.png")
 cv2.namedWindow("input", cv2.WINDOW_NORMAL)
 cv2.imshow("input", image)
 

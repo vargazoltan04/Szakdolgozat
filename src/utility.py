@@ -1,3 +1,6 @@
+#Megkeresi a minimumpontokat egy tömbben (csak akkor találja meg, ha azok 0-k)
+#ha több van közvetlen egymás mellett, akkor a legutolsó pontot találja meg
+
 def find_local_minimum_points(arr):
     arr_minimum_points = []
 
@@ -5,5 +8,4 @@ def find_local_minimum_points(arr):
         if arr[i] != 0 and arr[i+1] == 0:
             arr_minimum_points.append(i)
 
-    print(arr_minimum_points)
     return arr_minimum_points
