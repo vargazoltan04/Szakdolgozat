@@ -12,16 +12,7 @@ height, width = image.shape
 
 #vízszintes vetület
 #végigiterálok a sorokon, és kiszámolom hogy soronként hány fekete pixel van
-horizontal_projection = []
-for row in range(height):
-    row_data = image[row, :]
-
-    count_black_pixels = 0
-    for pixel in row_data:
-        if pixel == 0:
-            count_black_pixels += 1
-
-    horizontal_projection.append(count_black_pixels)
+horizontal_projection = utility.horizontal_projection(image)
 
 #lokális minimumpontok megkeresése (sorközök), és piros vonalak behúzása a képre
 #Ez nem fontos, de látszik a képen, ha hiba van rajta, mivel vizuális. 

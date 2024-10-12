@@ -11,7 +11,7 @@ def find_local_minimum_points(arr):
     return arr_minimum_points
 
 def vertical_projection(image):
-    height, width = image.shape
+    _, width = image.shape
     vertical_projection = []
     for col in range(width):
         col_data = image[:, col]
@@ -24,3 +24,18 @@ def vertical_projection(image):
         vertical_projection.append(count_black_pixels)
     
     return vertical_projection
+
+def horizontal_projection(image):
+    height, _ = image.shape
+    horizontal_projection = []
+    for row in range(height):
+        row_data = image[row, :]
+
+        count_black_pixels = 0
+        for pixel in row_data:
+            if pixel == 0:
+                count_black_pixels += 1
+
+        horizontal_projection.append(count_black_pixels)
+
+    return horizontal_projection
