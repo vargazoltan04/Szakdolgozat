@@ -4,6 +4,8 @@ import scipy.signal
 import utility
 import numpy as np
 
+#Képen a sorok szegmentálása
+#Úgy éri el, hogy a vízszintes vetületen ahol van 0 érték, ott van sortörés
 def row_segmentation(image):
     rows = []
     #vízszintes vetület

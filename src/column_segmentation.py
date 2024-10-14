@@ -5,6 +5,8 @@ import utility
 import numpy as np
 
 
+#Sorokat betűkre bontja, egy függőleges vetület segítségével
+#Ahol a vetületen 0 az érték (tehát nincs abban az oszlopban fekete pixel), ott van oszloptörés
 def letter_segmentation(row):
     vertical_projection = utility.vertical_projection(row)
     min_points = utility.find_local_minimum_points(vertical_projection)
@@ -18,6 +20,13 @@ def letter_segmentation(row):
 
     return letters
     
+#Ellenőrzi, hogy egy képen biztos csak egy betű van-e. Ha nem, akkor a vízszintes,
+#és függőleges vetületen is pontosan 2 összefüggő terület van (ez azért van, mert a betűket úgy
+#szegmentálja a program, hogy ha van legalább 1 oszlopnyi csak fehér pixel, akkor ott van törés
+#és csak akkor van 2 betű egy képen, ha azok egymás fölé lógnak, vízszintesen viszont biztos 
+#hogy takarják egymást) viszont magán a képen legalább 3 összefüggő terület kell legyen
+#Ez felismeri, hogyha 2 betű van a képen, de ha csak 1 darab ékezetes karakter arra nem jelez be
+#mivel azoknak a vízszintes vetületükön 3 darab összefüggő terület van (háttér, ékezet, szár)
 def is_correct_letter(letter):
     horizontal_projection_letter = utility.horizontal_projection(letter)
     horizontal_projection_letter = np.array(horizontal_projection_letter).reshape(1, -1).astype(np.uint8)
@@ -35,9 +44,6 @@ def is_correct_letter(letter):
         return False
     
     return True
-#Piros vonalak behúzása azért, hogy vizuálisabb legyen
-#for i in range(len(min_points) - 1):
-#    cv2.line(row_color, (min_points[i], 0), (min_points[i], height), (0,0,255), 1)
 
 #plt.plot(vertical_projection)
 #plt.title("Horizontal projection")

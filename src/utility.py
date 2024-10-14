@@ -1,6 +1,5 @@
 #Megkeresi a minimumpontokat egy tömbben (csak akkor találja meg, ha azok 0-k)
 #ha több van közvetlen egymás mellett, akkor a legutolsó pontot találja meg
-
 def find_local_minimum_points(arr):
     arr_minimum_points = []
 
@@ -10,6 +9,7 @@ def find_local_minimum_points(arr):
 
     return arr_minimum_points
 
+#Függőleges vetületet számol ki
 def vertical_projection(image):
     _, width = image.shape
     vertical_projection = []
@@ -25,6 +25,7 @@ def vertical_projection(image):
     
     return vertical_projection
 
+#Vízszintes vetületet számol ki
 def horizontal_projection(image):
     height, _ = image.shape
     horizontal_projection = []
