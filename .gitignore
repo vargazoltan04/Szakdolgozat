@@ -2,7 +2,7 @@ images/binarized_image/*
 images/input/*
 images/letters/*
 images/rows/*
-teaching_data
+train_data
 src/__pycache__
 jegyzet.txt
 temp/*
