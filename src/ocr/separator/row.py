@@ -1,5 +1,5 @@
-import character
-import utility
+from separator import character
+import util.util as util
 import numpy as np
 import cv2
 
@@ -18,8 +18,8 @@ class row:
             self.letters[i].save_letter(filename)
 
     def letter_segmentation(self):
-        vertical_projection = utility.vertical_projection(self.row)
-        min_points = utility.find_local_minimum_points(vertical_projection)
+        vertical_projection = util.vertical_projection(self.row)
+        min_points = util.find_local_minimum_points(vertical_projection)
 
         offset = 0
         for i in range(1, len(min_points)):

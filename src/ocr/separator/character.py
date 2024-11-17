@@ -1,4 +1,4 @@
-import utility
+import util.util as util
 import numpy as np
 import cv2
 
@@ -12,9 +12,9 @@ class character:
         cv2.imwrite(filename + f"row{self.row_num}_letter{self.char_num}.png", self.char)
 
     def is_correct_letter(self):
-        horizontal_projection_letter = utility.horizontal_projection(self.char)
+        horizontal_projection_letter = util.horizontal_projection(self.char)
         horizontal_projection_letter = np.array(horizontal_projection_letter).reshape(1, -1).astype(np.uint8)
-        vertical_projection_letter = utility.vertical_projection(self.char)
+        vertical_projection_letter = util.vertical_projection(self.char)
         vertical_projection_letter = np.array(vertical_projection_letter).reshape(1, -1).astype(np.uint8)
         
         num_labels_horizontal, labels_horizontal = cv2.connectedComponents(horizontal_projection_letter)

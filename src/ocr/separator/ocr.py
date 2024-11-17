@@ -1,7 +1,7 @@
+from separator import row
+import util.util as util
 import cv2
 import numpy as np
-import row
-import utility
 
 class ocr:
     def __init__(self, image_path, save_path):
@@ -52,11 +52,11 @@ class ocr:
     def row_segmentation(self):
         #vízszintes vetület
         #végigiterálok a sorokon, és kiszámolom hogy soronként hány fekete pixel van
-        horizontal_projection = utility.horizontal_projection(self.image)
+        horizontal_projection = util.horizontal_projection(self.image)
 
         #lokális minimumpontok megkeresése (sorközök), és piros vonalak behúzása a képre
         #Ez nem fontos, de látszik a képen, ha hiba van rajta, mivel vizuális. 
-        min_points = utility.find_local_minimum_points(horizontal_projection)
+        min_points = util.find_local_minimum_points(horizontal_projection)
 
         min_points.append(len(horizontal_projection))
         #Többi sor, illetve fehér sorok törlése
