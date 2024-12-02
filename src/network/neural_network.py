@@ -27,8 +27,8 @@ test_dataset = [train_dataset[i] for i in range(len(train_dataset)) if i in test
 train_dataset = [train_dataset[i] for i in range(len(train_dataset)) if i not in test_indices]
 #print(train_dataset.classes)
 #Create data loaders
-train_loader = DataLoader(dataset=train_dataset, batch_size=64, shuffle=True)
-test_loader = DataLoader(dataset=test_dataset, batch_size=64, shuffle=False)
+train_loader = DataLoader(dataset=train_dataset, batch_size=32, shuffle=True)
+test_loader = DataLoader(dataset=test_dataset, batch_size=32, shuffle=False)
 
 class CNN(nn.Module):
     def __init__(self):
@@ -86,10 +86,16 @@ optimizer = optim.Adam(model.parameters(), lr=0.001)
 
 
 # Training loop
-#5 epoch => 98.21%
-#8 epoch => 99.11%
-#10 epoch => 99.47%
-epochs = 8
+#5 epoch, 64 batch => 98.21%
+#8 epoch, 64 batch => 99.11%
+#8 epoch, 32 batch => 99.55%
+#9 epoch, 32 batch => 99.58%
+#10 epoch, 32 batch => 99.28%
+#10 epoch, 64 batch => 99.47%
+#15 epoch, 32 batch, learning_rate_optimization => 99.85%
+epochs = 15
+loss_previous = 999999
+learning_rate_lowered = False
 for epoch in range(epochs):
     model.train()
     running_loss = 0.0
@@ -102,12 +108,26 @@ for epoch in range(epochs):
         
         # Calculate loss
         loss = criterion(outputs, labels)
+
+        
         
         # Backward pass and optimization
         loss.backward()
         optimizer.step()
-        
         running_loss += loss.item()
+
+        
+    loss_current = running_loss/len(train_loader)
+    if abs(loss_previous - loss_current) < 0.03 and not learning_rate_lowered:
+        print(loss_previous)
+        print(loss_current)
+        print('lower')
+        for param_group in optimizer.param_groups:
+            param_group['lr'] = param_group['lr']/10
+        
+        learning_rate_lowered = True
+
+    loss_previous = loss_current
     print(f"Epoch {epoch+1}, Loss: {running_loss/len(train_loader)}")
 
 # Evaluate the model
