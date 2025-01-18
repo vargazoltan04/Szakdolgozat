@@ -4,8 +4,8 @@ import json
 import numpy as np
 from util import util
 
-path = "../train_data"
-output_path = "../train_data/data.json"
+path = "../../train_data"
+output_path = "../../train_data/data.json"
 folders = util.list_folders(path)
 
 output = []

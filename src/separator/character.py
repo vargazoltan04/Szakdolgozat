@@ -33,7 +33,6 @@ class character:
         self.char = cv2.bitwise_not(self.char)
         num_labels, labels, stats, centroids = cv2.connectedComponentsWithStats(self.char, connectivity=8)
 
-        self.char = cv2.cvtColor(self.char, cv2.COLOR_GRAY2BGR)
         for i in range(1, num_labels):
             x = stats[i, cv2.CC_STAT_LEFT]
             y = stats[i, cv2.CC_STAT_TOP]
@@ -46,10 +45,31 @@ class character:
             temp_char = character(temp_im, self.row_num, self.char_num + (i - 1))
             output.append(temp_char)
         
-        #self.char = cv2.bitwise_not(self.char)
-        #if self.char.dtype != np.uint8:
-        #    self.char = np.clip(self.char, 0, 255).astype(np.uint8)
+
+        if self.char.dtype != np.uint8:
+            self.char = np.clip(self.char, 0, 255).astype(np.uint8)
         #cv2.imshow("separated", self.char)
 
         return output
+    
+    def resize(self):
+        desired_height = 64
+        desired_width = 64
+
+        #self.char = cv2.resize(self.char, (40, round(40 / (self.char.shape[0] / 40))), interpolation = cv2.INTER_LINEAR)
+        result = np.full((desired_height, desired_height), 255, dtype=np.uint8)
+
+        # compute center offset
+        x_center = (desired_width - self.char.shape[1]) // 2
+        y_center = (desired_height - self.char.shape[0]) // 2
+
+
+        # copy img image into center of result image
+        result[y_center:y_center + self.char.shape[0], 
+            x_center:x_center + self.char.shape[1]] = self.char
+        
+        #kernel = np.ones((3, 3), np.uint8) 
+        #result = cv2.erode(result, kernel)  
+
+        self.char = result
 
