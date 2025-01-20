@@ -12,9 +12,8 @@ class CNN(nn.Module):
         self.pool = nn.MaxPool2d(kernel_size=2, stride=2)
 
         self.fc1 = nn.Linear(in_features=32 * 8 * 8, out_features=128)  # Adjust for input size
-        self.fc2 = nn.Linear(in_features=128, out_features=94)
-
-        self.softmax = nn.LogSoftmax(dim = 1)
+        self.dropout = nn.Dropout(p=0.5)
+        self.fc2 = nn.Linear(in_features=128, out_features=26)
 
         #self.fc1 = nn.Linear(3 * 64 * 64, 2048)  # Input layer
         #self.fc2 = nn.Linear(2048, 1024)      # Hidden layer
@@ -36,7 +35,7 @@ class CNN(nn.Module):
         # Flatten the tensor
         x = x.view(x.size(0), -1)  # Flatten for the fully connected layer
         # Fully connected layers with activation
-        x = F.relu(self.fc1(x))
+        x = self.dropout(F.relu(self.fc1(x)))
         x = self.fc2(x)  # No activation for output (handled in loss)
         return x
     

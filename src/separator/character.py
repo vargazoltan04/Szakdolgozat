@@ -4,7 +4,11 @@ import cv2
 
 class character:
     def __init__(self, char, row_num, char_num):
-        self.char = char
+        inverted = cv2.bitwise_not(char)
+        coords = cv2.findNonZero(inverted)
+        x, y, w, h = cv2.boundingRect(coords)
+
+        self.char = char[y:y+h, x:x+w]
         self.row_num = row_num
         self.char_num = char_num
 
@@ -68,8 +72,8 @@ class character:
         result[y_center:y_center + self.char.shape[0], 
             x_center:x_center + self.char.shape[1]] = self.char
         
-        #kernel = np.ones((3, 3), np.uint8) 
-        #result = cv2.erode(result, kernel)  
+        kernel = np.ones((3, 3), np.uint8) 
+        result = cv2.erode(result, kernel)  
 
         self.char = result
 

@@ -5,24 +5,26 @@ import torch.optim as optim
 from torchvision import datasets, transforms
 from torch.utils.data import DataLoader
 import json
+import cv2
 
 
 transform = transforms.Compose([
-    transforms.RandomHorizontalFlip(),         # Horizontal flipping
-    transforms.RandomRotation(30),             # Rotate by a random angle (30 degrees max)
-    transforms.RandomResizedCrop(64, scale=(0.8, 1.0)),  # Randomly resize and crop
-    transforms.ColorJitter(brightness=0.2, contrast=0.2),  # Random color adjustments
-    transforms.ToTensor(),             
-    transforms.Grayscale(num_output_channels=1),       # Convert to tensor
-    transforms.Normalize((0.5,), (0.5,))       # Normalize (adjust based on your data)
-])
+    transforms.Grayscale(num_output_channels=1),  
+    transforms.Resize((64, 64)),            # Convert to tensor
+    #transforms.RandomHorizontalFlip(),         # Horizontal flipping
+    #transforms.RandomRotation(30),             # Rotate by a random angle (30 degrees max)
+    #transforms.RandomResizedCrop(64, scale=(0.8, 1.0)),  # Randomly resize and crop
+    transforms.ToTensor(),
+    #transforms.Lambda(lambda x: x + 0.1 * torch.randn_like(x)),  # Add Gaussian noise
+    transforms.Normalize((0.5,), (0.5,))
+    ])
 
 # Load the MNIST dataset
-train_dataset = datasets.ImageFolder(root='../train_data/class', transform=transform)
-
-indices = list(range(len(train_dataset)))
-test_indices = indices[4::5]  # Every 5th element
-train_indices = [i for i in indices if i not in test_indices]
+train_dataset = datasets.ImageFolder(root='../../train_data/data/training_data', transform=transform)
+test_dataset = datasets.ImageFolder(root="../../train_data/data/testing_data", transform=transform)
+#indices = list(range(len(train_dataset)))
+#test_indices = indices[4::5]  # Every 5th element
+#train_indices = [i for i in indices if i not in test_indices]
 
 
 # Get the class-to-index mapping
@@ -39,19 +41,19 @@ with open('index_class_mapping.json', 'w') as json_file:
 #train_dataset = Subset(train_dataset, train_indices)
 #test_dataset = Subset(train_dataset, test_indices)
 
-test_dataset = [train_dataset[i] for i in range(len(train_dataset)) if i in test_indices]
-train_dataset = [train_dataset[i] for i in range(len(train_dataset)) if i not in test_indices]
+#test_dataset = [train_dataset[i] for i in range(len(train_dataset)) if i in test_indices]
+#train_dataset = [train_dataset[i] for i in range(len(train_dataset)) if i not in test_indices]
 #print(train_dataset.classes)
 #Create data loaders
-train_loader = DataLoader(dataset=train_dataset, batch_size=16, shuffle=True)
-test_loader = DataLoader(dataset=test_dataset, batch_size=16, shuffle=False)
+train_loader = DataLoader(dataset=train_dataset, batch_size=32, shuffle=True)
+test_loader = DataLoader(dataset=test_dataset, batch_size=32, shuffle=False)
     
 # Initialize model
 model = CNN()
 
 # Define loss function and optimizer
 criterion = nn.CrossEntropyLoss()
-optimizer = optim.SGD(model.parameters(), lr=0.12, momentum=0.15)
+optimizer = optim.SGD(model.parameters(), lr=0.12, momentum=0.1)
 
 
 # Training loop
@@ -64,7 +66,7 @@ optimizer = optim.SGD(model.parameters(), lr=0.12, momentum=0.15)
 #15 epoch, 32 batch, learning_rate_optimization => 99.85%
 #15 epoch, 16 batch, lr = 0.1, 4 conv layer => 99.87%
 #20 epoch, 32 batch, lr = 0.12, 3 conv layer => 99.89%
-epochs = 10
+epochs = 12
 loss_previous = 999999
 learning_rate_lowered = False
 for epoch in range(epochs):
@@ -90,7 +92,7 @@ for epoch in range(epochs):
 
         
     loss_current = running_loss/len(train_loader)
-    if abs(loss_previous - loss_current) < 0.1 and not learning_rate_lowered:
+    if abs(loss_previous - loss_current) < 0.05 and not learning_rate_lowered:
         #print(loss_previous)
         #print(loss_current)
         #print('lower')
