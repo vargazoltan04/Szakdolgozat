@@ -6,8 +6,10 @@ from torchvision import datasets, transforms
 from torch.utils.data import DataLoader
 import json
 import cv2
+import numpy as np
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+print(device)
 transform = transforms.Compose([
     transforms.Grayscale(num_output_channels=1),  
     transforms.Resize((64, 64)),            # Convert to tensor
@@ -44,7 +46,8 @@ train_loader = DataLoader(dataset=train_dataset, batch_size=32, shuffle=True)
 test_loader = DataLoader(dataset=test_dataset, batch_size=32, shuffle=False)
     
 # Initialize model
-model = VGG16(94)
+model = VGG16(52)
+model = model.to(device)
 
 # Define loss function and optimizer
 criterion = nn.CrossEntropyLoss()
@@ -53,14 +56,13 @@ optimizer = optim.SGD(model.parameters(), lr=0.01, weight_decay=0.005, momentum=
 
 
 print("Start training ... ")
-epochs = 15
+epochs = 8
 loss_previous = 999999
 learning_rate_lowered = False
 for epoch in range(epochs):
     model.train()
     running_loss = 0.0
     for images, labels in train_loader:
-        # Take the Tensors onto the device
         images = images.to(device)
         labels = labels.to(device)
         outputs = model(images)

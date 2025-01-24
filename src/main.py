@@ -6,8 +6,9 @@ import torch
 import PIL.Image as Image
 import PIL
 import json
+import numpy as np
 
-from network.model import CNN
+from network.model import VGG16
 from torchvision import transforms
 
 transform = transforms.Compose([
@@ -19,14 +20,12 @@ transform = transforms.Compose([
 
 
 def main():
-    OCR = ocr.ocr("../images/input/input2.png", "../images/")
+    OCR = ocr.ocr("../images/input/input.png", "../images/")
 
-    OCR.binarize().delete_small_components(10).row_segmentation().save_rows("rows/row").letter_segmentation().save_letters("../images/letters/")
+    OCR.binarize().saveim_bin("binarized_image/im.png").delete_small_components(10).row_segmentation().save_rows("rows/row").letter_segmentation().save_letters("../images/letters/")
     #OCR.binarize().delete_small_components(10).row_segmentation().letter_segmentation() 
 
-    cv2.waitKey(0)
-
-    model = CNN()
+    model = VGG16(52)
     model.load_state_dict(torch.load("./network/model_weights.pth", weights_only=True))
 
     # Load the JSON data into a dictionary
@@ -38,9 +37,6 @@ def main():
     model.eval()
     for line in OCR.rows:
         for letter in line.letters:
-            #cv2.destroyAllWindows()
-            #cv2.imshow("letter", letter.char)
-            #cv2.waitKey(0)
             _, predicted_class = torch.max(model(transform(Image.fromarray(letter.char)).unsqueeze(0)), 1)
             output += index_class_mapping[str(predicted_class.item())]
 
