@@ -1,4 +1,4 @@
-from model import CNN
+from model import VGG16
 import torch
 import torch.nn as nn
 import torch.optim as optim
@@ -7,24 +7,19 @@ from torch.utils.data import DataLoader
 import json
 import cv2
 
-
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 transform = transforms.Compose([
     transforms.Grayscale(num_output_channels=1),  
     transforms.Resize((64, 64)),            # Convert to tensor
-    #transforms.RandomHorizontalFlip(),         # Horizontal flipping
-    #transforms.RandomRotation(30),             # Rotate by a random angle (30 degrees max)
-    #transforms.RandomResizedCrop(64, scale=(0.8, 1.0)),  # Randomly resize and crop
     transforms.ToTensor(),
-    #transforms.Lambda(lambda x: x + 0.1 * torch.randn_like(x)),  # Add Gaussian noise
-    transforms.Normalize((0.5,), (0.5,))
-    ])
-
+])
+print("Loading ... ")
 # Load the MNIST dataset
-train_dataset = datasets.ImageFolder(root='../../train_data/data/training_data', transform=transform)
-test_dataset = datasets.ImageFolder(root="../../train_data/data/testing_data", transform=transform)
-#indices = list(range(len(train_dataset)))
-#test_indices = indices[4::5]  # Every 5th element
-#train_indices = [i for i in indices if i not in test_indices]
+train_dataset = datasets.ImageFolder(root='../../train_data/data', transform=transform)
+test_dataset = datasets.ImageFolder(root="../../train_data/data", transform=transform)
+indices = list(range(len(train_dataset)))
+test_indices = indices[4::5]  # Every 5th element
+train_indices = [i for i in indices if i not in test_indices]
 
 
 # Get the class-to-index mapping
@@ -41,50 +36,39 @@ with open('index_class_mapping.json', 'w') as json_file:
 #train_dataset = Subset(train_dataset, train_indices)
 #test_dataset = Subset(train_dataset, test_indices)
 
-#test_dataset = [train_dataset[i] for i in range(len(train_dataset)) if i in test_indices]
-#train_dataset = [train_dataset[i] for i in range(len(train_dataset)) if i not in test_indices]
+test_dataset = [train_dataset[i] for i in range(len(train_dataset)) if i in test_indices]
+train_dataset = [train_dataset[i] for i in range(len(train_dataset)) if i not in test_indices]
 #print(train_dataset.classes)
 #Create data loaders
 train_loader = DataLoader(dataset=train_dataset, batch_size=32, shuffle=True)
 test_loader = DataLoader(dataset=test_dataset, batch_size=32, shuffle=False)
     
 # Initialize model
-model = CNN()
+model = VGG16(94)
 
 # Define loss function and optimizer
 criterion = nn.CrossEntropyLoss()
-optimizer = optim.SGD(model.parameters(), lr=0.12, momentum=0.1)
+optimizer = optim.SGD(model.parameters(), lr=0.01, weight_decay=0.005, momentum=0.1)
 
 
-# Training loop
-#5 epoch, 64 batch => 98.21%
-#8 epoch, 64 batch => 99.11%
-#8 epoch, 32 batch => 99.55%
-#9 epoch, 32 batch => 99.58%
-#10 epoch, 32 batch => 99.28%
-#10 epoch, 64 batch => 99.47%
-#15 epoch, 32 batch, learning_rate_optimization => 99.85%
-#15 epoch, 16 batch, lr = 0.1, 4 conv layer => 99.87%
-#20 epoch, 32 batch, lr = 0.12, 3 conv layer => 99.89%
-epochs = 12
+
+print("Start training ... ")
+epochs = 15
 loss_previous = 999999
 learning_rate_lowered = False
 for epoch in range(epochs):
     model.train()
     running_loss = 0.0
     for images, labels in train_loader:
-        # Zero the gradients
-        optimizer.zero_grad()
-        
-        # Forward pass
-
+        # Take the Tensors onto the device
+        images = images.to(device)
+        labels = labels.to(device)
         outputs = model(images)
-        
-        # Calculate loss
         loss = criterion(outputs, labels)
 
         
-        
+        # Zero the gradients
+        optimizer.zero_grad()
         # Backward pass and optimization
         loss.backward()
         optimizer.step()
@@ -110,6 +94,8 @@ correct = 0
 total = 0
 
 for images, labels in test_loader:
+    images = images.to(device)
+    labels = labels.to(device)
     outputs = model(images)
     _, predicted = torch.max(outputs, 1)
     total += labels.size(0)
