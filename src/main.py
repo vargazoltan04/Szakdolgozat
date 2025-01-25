@@ -20,12 +20,12 @@ transform = transforms.Compose([
 
 
 def main():
-    OCR = ocr.ocr("../images/input/input.png", "../images/")
+    OCR = ocr.ocr("../images/input/input6_tnr.png", "../images/")
 
     OCR.binarize().saveim_bin("binarized_image/im.png").delete_small_components(10).row_segmentation().save_rows("rows/row").letter_segmentation().save_letters("../images/letters/")
     #OCR.binarize().delete_small_components(10).row_segmentation().letter_segmentation() 
 
-    model = VGG16(52)
+    model = VGG16(58)
     model.load_state_dict(torch.load("./network/model_weights.pth", weights_only=True))
 
     # Load the JSON data into a dictionary

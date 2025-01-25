@@ -36,7 +36,9 @@ class row:
             else:
                 sep_letters = char.separate_incorrect_letters()
                 for letter in sep_letters:
-                    letter.resize()
+                    cv2.imshow("asdasd", letter.char)
+                    #letter.resize()
+                cv2.waitKey(0)
                 self.letters += sep_letters
                 offset += len(sep_letters) - 1
 

@@ -22,8 +22,8 @@ def resize(letter):
     
     return result
 
-path = "../../train_data/data/"
-output_path = "../../train_data/data/"
+path = "../../train_data/data2/"
+output_path = "../../train_data/data2/"
 folders = util.list_folders(path)
 
 output = []

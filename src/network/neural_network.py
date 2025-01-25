@@ -17,8 +17,8 @@ transform = transforms.Compose([
 ])
 print("Loading ... ")
 # Load the MNIST dataset
-train_dataset = datasets.ImageFolder(root='../../train_data/data', transform=transform)
-test_dataset = datasets.ImageFolder(root="../../train_data/data", transform=transform)
+train_dataset = datasets.ImageFolder(root='../../train_data/data2', transform=transform)
+test_dataset = datasets.ImageFolder(root="../../train_data/data2", transform=transform)
 indices = list(range(len(train_dataset)))
 test_indices = indices[4::5]  # Every 5th element
 train_indices = [i for i in indices if i not in test_indices]
@@ -31,8 +31,8 @@ class_to_idx = train_dataset.class_to_idx  # Assuming `train_dataset` is availab
 idx_to_class = {v: k for k, v in class_to_idx.items()}
 
 # Save the predictions to a JSON file
-with open('index_class_mapping.json', 'w') as json_file:
-    json.dump(idx_to_class, json_file, indent=4)
+#with open('index_class_mapping.json', 'w') as json_file:
+#    json.dump(idx_to_class, json_file, indent=4)
 
 # Step 3: Create Subsets
 #train_dataset = Subset(train_dataset, train_indices)
@@ -46,17 +46,17 @@ train_loader = DataLoader(dataset=train_dataset, batch_size=32, shuffle=True)
 test_loader = DataLoader(dataset=test_dataset, batch_size=32, shuffle=False)
     
 # Initialize model
-model = VGG16(52)
+model = VGG16(58)
 model = model.to(device)
 
 # Define loss function and optimizer
 criterion = nn.CrossEntropyLoss()
-optimizer = optim.SGD(model.parameters(), lr=0.01, weight_decay=0.005, momentum=0.1)
+optimizer = optim.SGD(model.parameters(), lr=0.005, weight_decay=0.005, momentum=0.08)
 
 
 
 print("Start training ... ")
-epochs = 8
+epochs = 13
 loss_previous = 999999
 learning_rate_lowered = False
 for epoch in range(epochs):

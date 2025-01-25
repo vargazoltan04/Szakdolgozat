@@ -6,6 +6,7 @@ class character:
     def __init__(self, char, row_num, char_num):
         _, self.bin_char = cv2.threshold(char, 128, 255, cv2.THRESH_BINARY)
         inverted = cv2.bitwise_not(self.bin_char)
+
         coords = cv2.findNonZero(inverted)
         x, y, w, h = cv2.boundingRect(coords)
 
