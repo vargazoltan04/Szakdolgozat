@@ -65,15 +65,41 @@ class ocr:
         #Többi sor, illetve fehér sorok törlése
         for i in range(1, len(min_points)):
             row_image_bin = self.bin_image[min_points[i-1]:min_points[i], :]
-            row_image = self.image[min_points[i-1]:min_points[i], :]
+            row_image_inverted_bin = cv2.bitwise_not(row_image_bin)
 
-            non_white_rows = np.any(row_image_bin < 255, axis=1)
-            row_image_trimmed = row_image[non_white_rows]
-            row_im: row = row.row(row_image_trimmed, i - 1)
+            letter_pixels = cv2.findNonZero(row_image_inverted_bin)
+            x, y, w, h = cv2.boundingRect(letter_pixels)
+            row_image_trimmed = row_image_bin[y:y+h, x:x+w]
+
+            row_im: row = row.row(row_image_trimmed, 0, i - 1)
             self.rows.append(row_im)
 
+        self.calculate_spaces_length()
         return self
     
+    def calculate_spaces_length(self):
+        sum = 0
+        count = 0
+        for r in self.rows:
+            image = r.row
+            projection = util.vertical_projection(image)
+
+            sum_in_row = 0
+            for i in projection:
+                if i == 0:
+                    sum_in_row += 1
+
+                if i != 0 and sum_in_row > 0:
+                    sum += sum_in_row
+                    sum_in_row = 0
+                    count += 1
+
+        avg = (sum // count) * 1.4
+        for r in self.rows:
+            r.avg = avg 
+
+
+
     def letter_segmentation(self):
         for i in range(len(self.rows)):
             self.rows[i].letter_segmentation()

@@ -3,16 +3,20 @@ import numpy as np
 import cv2
 
 class character:
-    def __init__(self, char, row_num, char_num):
-        _, self.bin_char = cv2.threshold(char, 128, 255, cv2.THRESH_BINARY)
-        inverted = cv2.bitwise_not(self.bin_char)
+    def __init__(self, char, space_after, row_num, char_num):
 
-        coords = cv2.findNonZero(inverted)
+        _, self.bin_char = cv2.threshold(char, 128, 255, cv2.THRESH_BINARY)
+        self.inverted = cv2.bitwise_not(self.bin_char)
+
+        #print(f"row_num: {row_num} | char: {char.shape} | bin_char: {self.bin_char.shape} | inverted: {self.inverted.shape}")
+
+        coords = cv2.findNonZero(self.inverted)
         x, y, w, h = cv2.boundingRect(coords)
 
         self.char = char[y:y+h, x:x+w]
         self.row_num = row_num
         self.char_num = char_num
+        self.space_after = space_after
 
     def save_letter(self, filename):
         cv2.imwrite(filename + f"row{self.row_num}_letter{self.char_num}.png", self.char)
@@ -26,8 +30,7 @@ class character:
         num_labels_horizontal, labels_horizontal = cv2.connectedComponents(horizontal_projection_letter)
         num_labels_vertical, labels_vertical = cv2.connectedComponents(vertical_projection_letter)
         
-        letter_inversed = cv2.bitwise_not(self.bin_char)
-        num_labels, labels = cv2.connectedComponents(letter_inversed)
+        num_labels, labels = cv2.connectedComponents(self.inverted)
 
         if num_labels_vertical == 2 and num_labels_horizontal == 2 and num_labels >= 3:
             return False
@@ -36,8 +39,7 @@ class character:
     
     def separate_incorrect_letters(self):
         output = []
-        inverse = cv2.bitwise_not(self.bin_char)
-        num_labels, labels, stats, centroids = cv2.connectedComponentsWithStats(inverse, connectivity=8)
+        num_labels, labels, stats, centroids = cv2.connectedComponentsWithStats(self.inverted, connectivity=8)
 
         for i in range(1, num_labels):
             x = stats[i, cv2.CC_STAT_LEFT]
@@ -47,8 +49,9 @@ class character:
             #print(f"x: {x} y: {y} w: {w} h: {h}")
             #cv2.rectangle(self.char, (x, y), (x+w, y+h), (255, 0, 0), 1)
 
-            temp_im = cv2.bitwise_not(self.char[y:y+h, x:x+w])
-            temp_char = character(temp_im, self.row_num, self.char_num + (i - 1))
+            temp_im = cv2.bitwise_not(self.bin_char[y:y+h, x:x+w])
+
+            temp_char = character(self.bin_char, self.row_num, self.char_num + (i - 1))
             output.append(temp_char)
         
 
@@ -59,7 +62,8 @@ class character:
         return output
     
     def resize(self):
-        original_height, original_width = self.char.shape[:2]
+        self.save_letter("../images/tmp/letter")
+        original_height, original_width = self.char.shape
 
         target_height = 64
         target_width = 64
@@ -81,6 +85,6 @@ class character:
         
 
         self.char = result
-        _, self.char = cv2.threshold(self.char, 200, 255, cv2.THRESH_BINARY)
+        _, self.char = cv2.threshold(self.char, 128, 255, cv2.THRESH_BINARY)
 
 

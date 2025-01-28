@@ -20,13 +20,13 @@ transform = transforms.Compose([
 
 
 def main():
-    OCR = ocr.ocr("../images/input/input6_tnr.png", "../images/")
+    OCR = ocr.ocr("../images/input/input_talpas2.png", "../images/")
 
-    OCR.binarize().saveim_bin("binarized_image/im.png").delete_small_components(10).row_segmentation().save_rows("rows/row").letter_segmentation().save_letters("../images/letters/")
+    OCR.binarize(128).saveim_bin("binarized_image/im.png").delete_small_components(10).row_segmentation().save_rows("rows/row").letter_segmentation().save_letters("../images/letters/")
     #OCR.binarize().delete_small_components(10).row_segmentation().letter_segmentation() 
 
     model = VGG16(58)
-    model.load_state_dict(torch.load("./network/model_weights.pth", weights_only=True))
+    model.load_state_dict(torch.load("./network/model_weights.pth", weights_only=True, map_location=torch.device('cpu')))
 
     # Load the JSON data into a dictionary
     with open('./network/index_class_mapping.json', 'r') as json_file:
@@ -40,8 +40,18 @@ def main():
             _, predicted_class = torch.max(model(transform(Image.fromarray(letter.char)).unsqueeze(0)), 1)
             output += index_class_mapping[str(predicted_class.item())]
 
+            if letter.space_after:
+                output += " "
+
         output += "\n"
 
     print(output)
+
+    with open("../output/output.txt", "w") as file:
+        file.write(output)
+
+
+
+        
 if __name__ == "__main__":
     main()
