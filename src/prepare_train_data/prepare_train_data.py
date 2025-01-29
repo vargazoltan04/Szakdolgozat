@@ -4,26 +4,34 @@ import json
 import numpy as np
 from util import util
 
-def resize(letter):
-    desired_height = 64
-    desired_width = 64
+def resize(letter, size):
+    original_height, original_width = letter.shape
 
-    #self.char = cv2.resize(self.char, (40, round(40 / (self.char.shape[0] / 40))), interpolation = cv2.INTER_LINEAR)
-    result = np.full((desired_height, desired_height), 255, dtype=np.uint8)
+    target_height = 64
+    target_width = 64
 
-    # compute center offset
-    x_center = (desired_width - letter.shape[1]) // 2
-    y_center = (desired_height - letter.shape[0]) // 2
+    scale = min(size / original_width, size / original_height)
+    
+    new_width = int(original_width * scale)
+    new_height = int(original_height * scale)
+
+    resized_image = cv2.resize(letter, (new_width, new_height), interpolation=cv2.INTER_LINEAR)
+    result = np.full((target_width, target_height), 255, dtype=np.uint8)
+
+    x_center = (target_width - resized_image.shape[1]) // 2
+    y_center = (target_height - resized_image.shape[0]) // 2
 
 
-    # copy img image into center of result image
-    result[y_center:(y_center + letter.shape[0]), 
-        x_center:(x_center + letter.shape[1])] = letter
+    result[y_center:y_center + resized_image.shape[0], 
+        x_center:x_center + resized_image.shape[1]] = resized_image
     
     return result
+        
 
-path = "../../train_data/data2/"
-output_path = "../../train_data/data2/"
+lowercase = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
+uppercase = ['CA', 'CB', 'CC', 'CD', 'CE', 'CF', 'CG', 'CH', 'CI', 'CJ', 'CK', 'CL', 'CM', 'CN', 'CO', 'CP', 'CQ', 'CR', 'CS', 'CT', 'CU', 'CV', 'CW', 'CX', 'CY', 'CZ']
+path = "../../train_data/94-Class-ASCII-Image-OCR-Data-main/"
+output_path = "../../train_data/94-Class-ASCII-Image-OCR-Data-main/"
 folders = util.list_folders(path)
 
 output = []
@@ -33,34 +41,37 @@ for folder in folders:
     files = util.list_files(path_folder)
     for file in files:
         path_file = path_folder + f"/{file}"
-        print(path_file)
-        image = cv2.imread(path_file)
-        image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-        _, image = cv2.threshold(image, 128, 255, cv2.THRESH_BINARY)
+        image = cv2.imread(path_file, cv2.IMREAD_GRAYSCALE)
+        os.remove(path_file)
 
         if image.shape[0] > 64 or image.shape[1] > 64:
             continue
 
-        image = resize(image)
-        #kernel = np.ones((3, 3), dtype=np.uint8)
-        #image = cv2.dilate(image, kernel)
-        #cv2.imshow(path_file, image)
-        cv2.imwrite(path_file, image)
-        #cv2.waitKey(0)
-        #ratio = util.calculate_black_white_ratio(image)
-        
-        #image = cv2.bitwise_not(image)
-        #num_components, _ = cv2.connectedComponents(image, connectivity=8)
+        _, image = cv2.threshold(image, 128, 255, cv2.THRESH_BINARY) #binarizálás
+        if np.average(image) >= 245:
+            continue
 
-        #out_dict = {
-        #    "path": path_file,
-        #    "char": folder,
-        #    "components": num_components - 1,
-        #    "ratio": ratio,
-        #}
 
-        #output.append(out_dict)
-        #print(path_file) 
+        inverse = cv2.bitwise_not(image)
+        coords = cv2.findNonZero(inverse) #előtér pixelek kiszámolása
+        x, y, w, h = cv2.boundingRect(coords) #előtér pixelek befoglaló téglalap
+
+        image_no_padding = image[y:y+h, x:x+w] #kivágja a befoglaló téglalapot (magát a betűt)
+        rng = None #range
+        if folder in lowercase:
+            rng = range(15, 25)
+        elif folder in uppercase:
+            rng = range(25, 35)
+        else:
+            rng = range(15, 35)
+
+        for i in rng:
+            image = resize(image_no_padding, i)
+
+            output_path = path_folder + f"/{i}_{file}"
+            print(output_path)
+            cv2.imwrite(output_path, image)
+
 
 cv2.waitKey(0)
 #with open(output_path, 'w') as json_file:
