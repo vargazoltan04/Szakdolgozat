@@ -51,7 +51,7 @@ class character:
 
             temp_im = cv2.bitwise_not(self.bin_char[y:y+h, x:x+w])
 
-            temp_char = character(self.bin_char, self.row_num, self.char_num + (i - 1))
+            temp_char = character(self.bin_char, True, self.row_num, self.char_num + (i - 1))
             output.append(temp_char)
         
 
@@ -69,11 +69,12 @@ class character:
         target_width = 64
 
         scale = min(35 / original_width, 35 / original_height)
-        
-        new_width = int(original_width * scale)
-        new_height = int(original_height * scale)
+
+        new_width = int(original_width * scale) // 1
+        new_height = int(original_height * scale) // 1
 
         resized_image = cv2.resize(self.char, (new_width, new_height), interpolation=cv2.INTER_LINEAR)
+
         result = np.full((target_width, target_height), 255, dtype=np.uint8)
 
         x_center = (target_width - resized_image.shape[1]) // 2

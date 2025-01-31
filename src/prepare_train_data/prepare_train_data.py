@@ -30,8 +30,8 @@ def resize(letter, size):
 
 lowercase = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
 uppercase = ['CA', 'CB', 'CC', 'CD', 'CE', 'CF', 'CG', 'CH', 'CI', 'CJ', 'CK', 'CL', 'CM', 'CN', 'CO', 'CP', 'CQ', 'CR', 'CS', 'CT', 'CU', 'CV', 'CW', 'CX', 'CY', 'CZ']
-path = "../../train_data/94-Class-ASCII-Image-OCR-Data-main/"
-output_path = "../../train_data/94-Class-ASCII-Image-OCR-Data-main/"
+path = "../../train_data/data/"
+output_path = "../../train_data/data/"
 folders = util.list_folders(path)
 
 output = []
@@ -57,13 +57,13 @@ for folder in folders:
         x, y, w, h = cv2.boundingRect(coords) #előtér pixelek befoglaló téglalap
 
         image_no_padding = image[y:y+h, x:x+w] #kivágja a befoglaló téglalapot (magát a betűt)
-        rng = None #range
-        if folder in lowercase:
-            rng = range(15, 25)
-        elif folder in uppercase:
-            rng = range(25, 35)
-        else:
-            rng = range(15, 35)
+        rng = range(15, 47, 4)
+        #if folder in lowercase:
+        #    rng = range(15, 25)
+        #elif folder in uppercase:
+        #    rng = range(15, 35)
+        #else:
+        #    rng = range(15, 35)
 
         for i in rng:
             image = resize(image_no_padding, i)

@@ -20,7 +20,7 @@ transform = transforms.Compose([
 
 
 def main():
-    OCR = ocr.ocr("../images/input/input_talpas2.png", "../images/")
+    OCR = ocr.ocr("../images/input/input2.png", "../images/")
 
     OCR.binarize(128).saveim_bin("binarized_image/im.png").delete_small_components(10).row_segmentation().save_rows("rows/row").letter_segmentation().save_letters("../images/letters/")
     #OCR.binarize().delete_small_components(10).row_segmentation().letter_segmentation() 
