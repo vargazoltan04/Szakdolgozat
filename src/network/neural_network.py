@@ -17,8 +17,7 @@ transform = transforms.Compose([
 ])
 print("Loading ... ")
 # Load the MNIST dataset
-train_dataset = datasets.ImageFolder(root='../../train_data/data2', transform=transform)
-test_dataset = datasets.ImageFolder(root="../../train_data/data2", transform=transform)
+train_dataset = datasets.ImageFolder(root='../../train_data/data', transform=transform)
 indices = list(range(len(train_dataset)))
 test_indices = indices[4::5]  # Every 5th element
 train_indices = [i for i in indices if i not in test_indices]
@@ -39,7 +38,7 @@ idx_to_class = {v: k for k, v in class_to_idx.items()}
 #test_dataset = Subset(train_dataset, test_indices)
 
 test_dataset = [train_dataset[i] for i in range(len(train_dataset)) if i in test_indices]
-train_dataset = [train_dataset[i] for i in range(len(train_dataset)) if i not in test_indices]
+train_dataset = [train_dataset[i] for i in range(len(train_dataset)) if i in train_indices]
 #print(train_dataset.classes)
 #Create data loaders
 train_loader = DataLoader(dataset=train_dataset, batch_size=32, shuffle=True)
@@ -56,7 +55,7 @@ optimizer = optim.SGD(model.parameters(), lr=0.005, weight_decay=0.005, momentum
 
 
 print("Start training ... ")
-epochs = 13
+epochs = 5
 loss_previous = 999999
 learning_rate_lowered = False
 for epoch in range(epochs):
