@@ -4,7 +4,6 @@ import cv2
 
 class character:
     def __init__(self, char, space_after, row_num, char_num):
-
         _, self.bin_char = cv2.threshold(char, 128, 255, cv2.THRESH_BINARY)
         self.inverted = cv2.bitwise_not(self.bin_char)
 
@@ -49,39 +48,42 @@ class character:
             #print(f"x: {x} y: {y} w: {w} h: {h}")
             #cv2.rectangle(self.char, (x, y), (x+w, y+h), (255, 0, 0), 1)
 
-            temp_im = cv2.bitwise_not(self.bin_char[y:y+h, x:x+w])
+            temp_im = self.bin_char[y:y+h, x:x+w]
 
-            temp_char = character(self.bin_char, self.row_num, self.char_num + (i - 1))
+            temp_char = character(temp_im, False, self.row_num, self.char_num + (i - 1))
             output.append(temp_char)
         
 
         if self.char.dtype != np.uint8:
             self.char = np.clip(self.char, 0, 255).astype(np.uint8)
-        #cv2.imshow("separated", self.char)
 
         return output
     
-    def resize(self):
+    def resize(self, scale):
         self.save_letter("../images/tmp/letter")
         original_height, original_width = self.char.shape
 
         target_height = 64
         target_width = 64
-
-        scale = min(35 / original_width, 35 / original_height)
         
         new_width = int(original_width * scale)
         new_height = int(original_height * scale)
 
-        resized_image = cv2.resize(self.char, (new_width, new_height), interpolation=cv2.INTER_LINEAR)
-        result = np.full((target_width, target_height), 255, dtype=np.uint8)
+        if new_height < 15 and new_width < 15:
+            scale = min(15 / original_width, 15 / original_height)
+            new_height = int(original_height * scale)
+            new_width = int(original_width * scale)
 
-        x_center = (target_width - resized_image.shape[1]) // 2
-        y_center = (target_height - resized_image.shape[0]) // 2
+        if new_width >= 15 or new_height >= 15:
+            resized_image = cv2.resize(self.char, (new_width, new_height), interpolation=cv2.INTER_LINEAR)
+            result = np.full((target_width, target_height), 255, dtype=np.uint8)
+
+            x_center = (target_width - resized_image.shape[1]) // 2
+            y_center = (target_height - resized_image.shape[0]) // 2
 
 
-        result[y_center:y_center + resized_image.shape[0], 
-            x_center:x_center + resized_image.shape[1]] = resized_image
+            result[y_center:y_center + resized_image.shape[0], 
+                x_center:x_center + resized_image.shape[1]] = resized_image
         
 
         self.char = result

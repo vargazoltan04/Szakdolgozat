@@ -37,12 +37,11 @@ class row:
             char: character = character.character(letter_trimmed, white_cols_count > self.avg, self.row_num, offset + i - 1)
 
             if char.is_correct_letter():
-                char.resize()
                 self.letters.append(char)
             else:
                 sep_letters = char.separate_incorrect_letters()
-                for letter in sep_letters:
-                    letter.resize()
+                #for letter in sep_letters:
+                #    letter.resize()
                 self.letters += sep_letters
                 offset += len(sep_letters) - 1
 

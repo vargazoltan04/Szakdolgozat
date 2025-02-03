@@ -105,4 +105,20 @@ class ocr:
             self.rows[i].letter_segmentation()
 
         return self
+    
+    def resize(self):
+        min_scale = 9999999999
+        for row in self.rows:
+            for letter in row.letters:
+                original_height, original_width = letter.char.shape
+                scale = min(45 / original_width, 45 / original_height)
+                if scale < min_scale:
+                    min_scale = scale
+
+        for row in self.rows:
+            for letter in row.letters:
+                letter.resize(min_scale)
+
+        return self
+
 
