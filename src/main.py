@@ -20,9 +20,9 @@ transform = transforms.Compose([
 
 
 def main():
-    OCR = ocr.ocr("../images/input/input2.png", "../images/")
+    OCR = ocr.ocr("../images/input/test01.png", "../images/")
 
-    OCR.binarize(128).saveim_bin("binarized_image/im.png").delete_small_components(35).row_segmentation().save_rows("rows/row").letter_segmentation().resize().save_letters("../images/letters/")
+    OCR.binarize(128).saveim_bin("binarized_image/im.png").delete_small_components(10).row_segmentation().save_rows("rows/row").letter_segmentation().resize().save_letters("../images/letters/")
     #OCR.binarize().delete_small_components(10).row_segmentation().letter_segmentation() 
 
     model = VGG16(58)

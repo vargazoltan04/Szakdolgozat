@@ -42,6 +42,7 @@ class row:
                 sep_letters = char.separate_incorrect_letters()
                 #for letter in sep_letters:
                 #    letter.resize()
+                
                 self.letters += sep_letters
                 offset += len(sep_letters) - 1
 

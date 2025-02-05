@@ -49,14 +49,13 @@ class character:
             #cv2.rectangle(self.char, (x, y), (x+w, y+h), (255, 0, 0), 1)
 
             temp_im = self.bin_char[y:y+h, x:x+w]
-
             temp_char = character(temp_im, False, self.row_num, self.char_num + (i - 1))
             output.append(temp_char)
         
 
         if self.char.dtype != np.uint8:
             self.char = np.clip(self.char, 0, 255).astype(np.uint8)
-
+        print(f"{self.row_num} : {self.char_num}")
         return output
     
     def resize(self, scale):
@@ -74,9 +73,9 @@ class character:
             new_height = int(original_height * scale)
             new_width = int(original_width * scale)
 
+        result = np.full((target_width, target_height), 255, dtype=np.uint8)
         if new_width >= 15 or new_height >= 15:
             resized_image = cv2.resize(self.char, (new_width, new_height), interpolation=cv2.INTER_LINEAR)
-            result = np.full((target_width, target_height), 255, dtype=np.uint8)
 
             x_center = (target_width - resized_image.shape[1]) // 2
             y_center = (target_height - resized_image.shape[0]) // 2

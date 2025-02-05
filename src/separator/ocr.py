@@ -35,8 +35,14 @@ class ocr:
         return self
     
     def binarize(self, threshold=128):
-        _, self.bin_image = cv2.threshold(self.image, threshold, 255, cv2.THRESH_BINARY)
-
+        self.bin_image = cv2.adaptiveThreshold(
+            self.image, 
+            maxValue=255, 
+            adaptiveMethod=cv2.ADAPTIVE_THRESH_MEAN_C,
+            thresholdType=cv2.THRESH_BINARY,
+            blockSize=11,
+            C=10
+        )
         return self
     
     def delete_small_components(self, min_size):
@@ -47,7 +53,8 @@ class ocr:
             if sizes[label] < min_size:
                 labels[labels == label] = 0
 
-        self.image = np.where(labels > 0, self.image, self.image).astype(np.uint8)
+        self.image = np.where(labels > 0, self.image, 255).astype(np.uint8)
+        self.bin_image = np.where(labels > 0, self.bin_image, 255).astype(np.uint8)
         return self
     
     #Képen a sorok szegmentálása
@@ -94,7 +101,7 @@ class ocr:
                     sum_in_row = 0
                     count += 1
 
-        avg = (sum // count) * 1.4
+        avg = (sum // count) * 1.5
         for r in self.rows:
             r.avg = avg 
 
