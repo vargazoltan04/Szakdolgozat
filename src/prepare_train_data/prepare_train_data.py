@@ -27,6 +27,8 @@ def resize(letter, size):
     
     return result
         
+samelower = ['c', 'o', 'p', 's', 'u', 'v', 'w', 'x', 'z']
+sameupper = ['CC', 'CO', 'CP', 'CS', 'CU', 'CV', 'CW', 'CX', 'CZ']
 
 lowercase = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
 uppercase = ['CA', 'CB', 'CC', 'CD', 'CE', 'CF', 'CG', 'CH', 'CI', 'CJ', 'CK', 'CL', 'CM', 'CN', 'CO', 'CP', 'CQ', 'CR', 'CS', 'CT', 'CU', 'CV', 'CW', 'CX', 'CY', 'CZ']
@@ -57,13 +59,19 @@ for folder in folders:
         x, y, w, h = cv2.boundingRect(coords) #előtér pixelek befoglaló téglalap
 
         image_no_padding = image[y:y+h, x:x+w] #kivágja a befoglaló téglalapot (magát a betűt)
-        rng = range(15, 47, 4)
+        rng = range(15, 47, 3)
         #if folder in lowercase:
-        #    rng = range(15, 25)
+        #    rng = range(15, 35, 3)
         #elif folder in uppercase:
-        #    rng = range(15, 35)
+        #    rng = range(35, 45, 3)
         #else:
-        #    rng = range(15, 35)
+        #    rng = range(15, 45, 3)
+
+        if folder in samelower:
+            rng = range(15, 35, 2)
+        elif folder in sameupper:
+            rng = range(35, 56, 2)
+
 
         for i in rng:
             image = resize(image_no_padding, i)

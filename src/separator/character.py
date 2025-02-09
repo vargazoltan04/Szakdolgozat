@@ -7,7 +7,7 @@ class character:
         _, self.bin_char = cv2.threshold(char, 128, 255, cv2.THRESH_BINARY)
         self.inverted = cv2.bitwise_not(self.bin_char)
 
-        #print(f"row_num: {row_num} | char: {char.shape} | bin_char: {self.bin_char.shape} | inverted: {self.inverted.shape}")
+        print(f"row_num: {row_num} \t| char_num: {char_num} \t| char: {char.shape} \t| bin_char: {self.bin_char.shape} \t| inverted: {self.inverted.shape}")
 
         coords = cv2.findNonZero(self.inverted)
         x, y, w, h = cv2.boundingRect(coords)
@@ -55,7 +55,7 @@ class character:
 
         if self.char.dtype != np.uint8:
             self.char = np.clip(self.char, 0, 255).astype(np.uint8)
-        print(f"{self.row_num} : {self.char_num}")
+        #print(f"{self.row_num} : {self.char_num}")
         return output
     
     def resize(self, scale):

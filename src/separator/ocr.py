@@ -35,14 +35,16 @@ class ocr:
         return self
     
     def binarize(self, threshold=128):
-        self.bin_image = cv2.adaptiveThreshold(
-            self.image, 
-            maxValue=255, 
-            adaptiveMethod=cv2.ADAPTIVE_THRESH_MEAN_C,
-            thresholdType=cv2.THRESH_BINARY,
-            blockSize=11,
-            C=10
-        )
+        _, self.bin_image = cv2.threshold(self.image, threshold, 255, cv2.THRESH_BINARY)
+
+        #self.bin_image = cv2.adaptiveThreshold(
+        #    self.image, 
+        #    maxValue=255, 
+        #    adaptiveMethod=cv2.ADAPTIVE_THRESH_MEAN_C,
+        #    thresholdType=cv2.THRESH_BINARY,
+        #    blockSize=11,
+        #    C=10
+        #)
         return self
     
     def delete_small_components(self, min_size):
@@ -127,5 +129,3 @@ class ocr:
                 letter.resize(min_scale)
 
         return self
-
-

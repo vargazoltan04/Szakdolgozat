@@ -55,7 +55,7 @@ optimizer = optim.SGD(model.parameters(), lr=0.005, weight_decay=0.005, momentum
 
 
 print("Start training ... ")
-epochs = 5
+epochs = 4
 loss_previous = 999999
 learning_rate_lowered = False
 for epoch in range(epochs):
