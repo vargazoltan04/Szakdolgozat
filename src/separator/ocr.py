@@ -73,14 +73,18 @@ class ocr:
         min_points.append(len(horizontal_projection))
         #Többi sor, illetve fehér sorok törlése
         for i in range(1, len(min_points)):
-            row_image_bin = self.bin_image[min_points[i-1]:min_points[i], :]
-            row_image_inverted_bin = cv2.bitwise_not(row_image_bin)
+            row_image = self.image[min_points[i-1]:min_points[i], :]        #Kivágja a képből a sornak a képét
+            row_image_bin = self.bin_image[min_points[i-1]:min_points[i], :]    #Ugyanaz
 
-            letter_pixels = cv2.findNonZero(row_image_inverted_bin)
+            row_image_bin_inverted = cv2.bitwise_not(row_image_bin)
+
+            letter_pixels = cv2.findNonZero(row_image_bin_inverted) #Megkeresi a sorban a szöveg befoglaló téglalapját
             x, y, w, h = cv2.boundingRect(letter_pixels)
-            row_image_trimmed = row_image_bin[y:y+h, x:x+w]
+        
+            row_image_trimmed = row_image[y:y+h, x:x+w] #Kivágja a szöveget belőle
+            row_image_bin_trimmed = row_image_bin[y:y+h, x:x+w]
 
-            row_im: row = row.row(row_image_trimmed, 0, i - 1)
+            row_im: row = row.row(row_image_trimmed, row_image_bin_trimmed, 0, i - 1)
             self.rows.append(row_im)
 
         self.calculate_spaces_length()
@@ -90,20 +94,22 @@ class ocr:
         sum = 0
         count = 0
         for r in self.rows:
-            image = r.row
+            image = r.bin_row
             projection = util.vertical_projection(image)
 
             sum_in_row = 0
-            for i in projection:
-                if i == 0:
+            for i in range(0, len(projection) - 1):
+                if projection[i] == 0:
                     sum_in_row += 1
 
-                if i != 0 and sum_in_row > 0:
+                if projection[i] == 0 and projection[i+1] > 0:
                     sum += sum_in_row
                     sum_in_row = 0
                     count += 1
 
+
         avg = (sum // count) * 1.5
+            
         for r in self.rows:
             r.avg = avg 
 
@@ -116,16 +122,24 @@ class ocr:
         return self
     
     def resize(self):
-        min_scale = 9999999999
+        min_scale = float('inf')
         for row in self.rows:
             for letter in row.letters:
                 original_height, original_width = letter.char.shape
+
+                if original_width == 0 or original_height == 0:
+                    print(f"Figyelmeztetés: Üres betű észlelve! Kihagyva. ({original_width}x{original_height})")
+                    continue  # Kihagyjuk ezt a betűt
+
                 scale = min(45 / original_width, 45 / original_height)
                 if scale < min_scale:
                     min_scale = scale
 
         for row in self.rows:
             for letter in row.letters:
+                if letter.char.shape[0] == 0 or letter.char.shape[1] == 0:
+                    continue
+                
                 letter.resize(min_scale)
 
         return self

@@ -26,7 +26,7 @@ def main():
     #OCR.binarize().delete_small_components(10).row_segmentation().letter_segmentation() 
 
     model = VGG16(58) 
-    model.load_state_dict(torch.load("./network/model_weights_jo_kisnagybetutkeveri.pth", weights_only=True, map_location=torch.device('cpu')))
+    model.load_state_dict(torch.load("./network/model_weights_58_15-35-55_kisnagybetu.pth", weights_only=True, map_location=torch.device('cpu')))
 
     # Load the JSON data into a dictionary
     with open('./network/index_class_mapping.json', 'r') as json_file:
