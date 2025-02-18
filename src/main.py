@@ -8,6 +8,8 @@ import PIL
 import json
 import numpy as np
 
+from separator.binarizer.binarizer import BinarizerThresh
+
 from network.model import VGG16
 from torchvision import transforms
 
@@ -20,13 +22,14 @@ transform = transforms.Compose([
 
 
 def main():
-    OCR = ocr.ocr("../images/input/test01_low_quality.png", "../images/")
+    binarizer = BinarizerThresh()
+    OCR = ocr.ocr(binarizer, "../images/input/test01.png", "../images/")
 
-    OCR.binarize(128).saveim_bin("binarized_image/im.png").delete_small_components(5).row_segmentation().save_rows("rows/row").letter_segmentation().resize().save_letters("../images/letters/")
+    OCR.saveim_bin("binarized_image/im.png").delete_small_components(5).row_segmentation().save_rows("rows/row").letter_segmentation().resize().save_letters("../images/letters/")
     #OCR.binarize().delete_small_components(10).row_segmentation().letter_segmentation() 
 
     model = VGG16(58) 
-    model.load_state_dict(torch.load("./network/model_weights_jo_kisnagybetutkeveri.pth", weights_only=True, map_location=torch.device('cpu')))
+    model.load_state_dict(torch.load("./network/model_weights_58_15-35-55_kisnagybetu.pth", weights_only=True, map_location=torch.device('cpu')))
 
     # Load the JSON data into a dictionary
     with open('./network/index_class_mapping.json', 'r') as json_file:

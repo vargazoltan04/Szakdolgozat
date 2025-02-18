@@ -4,11 +4,17 @@ import cv2
 import numpy as np
 
 class ocr:
-    def __init__(self, image_path, save_path):
+    def __init__(self, binarizer, image_path, save_path):
+        self.binarizer = binarizer
         self.image = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
         self.bin_image = None
         self.save_path = save_path
         self.rows: row = []
+
+    def run(self):
+        self.bin_image = self.binarizer.binarize(self.image, 128)
+
+        return self
 
     def show(self, windowName):
         cv2.imshow(windowName, self.image)
