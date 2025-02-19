@@ -40,3 +40,26 @@ def horizontal_projection(image):
         horizontal_projection.append(count_black_pixels)
 
     return horizontal_projection
+
+def calculate_spaces_length(rows):
+    sum = 0
+    count = 0
+    for r in rows:
+        image = r.bin_row
+        projection = vertical_projection(image)
+
+        sum_in_row = 0
+        for i in range(0, len(projection) - 1):
+            if projection[i] == 0:
+                sum_in_row += 1
+
+            if projection[i] == 0 and projection[i+1] > 0:
+                sum += sum_in_row
+                sum_in_row = 0
+                count += 1
+
+
+    avg = (sum // count) * 1.5
+        
+    for r in rows:
+        r.avg = avg 

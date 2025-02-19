@@ -8,7 +8,10 @@ import PIL
 import json
 import numpy as np
 
-from separator.binarizer.binarizer import BinarizerThresh
+from separator.binarizer.binarizer_thresh import BinarizerThresh
+from separator.cleaner.cleaner import Cleaner
+from separator.row_segmentator.row_segmentator import RowSegmentator
+from separator.letter_segmentator.letter_segmentator import LetterSegmentator
 
 from network.model import VGG16
 from torchvision import transforms
@@ -23,9 +26,12 @@ transform = transforms.Compose([
 
 def main():
     binarizer = BinarizerThresh()
-    OCR = ocr.ocr(binarizer, "../images/input/test01.png", "../images/")
+    cleaner = Cleaner()
+    row_segmentator = RowSegmentator()
+    letter_segmentator = LetterSegmentator()
+    OCR = ocr.ocr(binarizer, cleaner, row_segmentator, letter_segmentator, "../images/input/test01.png", "../images/")
 
-    OCR.saveim_bin("binarized_image/im.png").delete_small_components(5).row_segmentation().save_rows("rows/row").letter_segmentation().resize().save_letters("../images/letters/")
+    OCR.run().save_rows("rows/row").resize().save_letters("../images/letters/").saveim_bin("binarized_image/im.png")
     #OCR.binarize().delete_small_components(10).row_segmentation().letter_segmentation() 
 
     model = VGG16(58) 
