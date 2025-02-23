@@ -95,6 +95,6 @@ class character:
         
 
         self.char = result
-        _, self.char = cv2.threshold(self.char, 128, 255, cv2.THRESH_BINARY)
+        #_, self.char = cv2.threshold(self.char, 128, 255, cv2.THRESH_BINARY)
 
 

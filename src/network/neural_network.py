@@ -17,7 +17,7 @@ transform = transforms.Compose([
 ])
 print("Loading ... ")
 # Load the MNIST dataset
-train_dataset = datasets.ImageFolder(root='../../train_data/data', transform=transform)
+train_dataset = datasets.ImageFolder(root='C:/Szakdoga/data', transform=transform)
 indices = list(range(len(train_dataset)))
 test_indices = indices[4::5]  # Every 5th element
 train_indices = [i for i in indices if i not in test_indices]
