@@ -63,3 +63,19 @@ def calculate_spaces_length(rows):
         
     for r in rows:
         r.avg = avg 
+
+def calculate_resize_scale(rows):
+    min_scale = float('inf')
+    for row in rows:
+        for letter in row.letters:
+            original_height, original_width = letter.char.shape
+
+            if original_width == 0 or original_height == 0:
+               print(f"Figyelmeztetés: Üres betű észlelve! Kihagyva. ({original_width}x{original_height})")
+               continue
+            
+            scale = min(45 / original_width, 45 / original_height)
+            if scale < min_scale:
+                min_scale = scale
+
+    return min_scale

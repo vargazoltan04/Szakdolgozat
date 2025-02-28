@@ -3,12 +3,21 @@ import util.util as util
 import cv2
 import numpy as np
 
+from separator.binarizer.base_binarizer import BaseBinarizer
+from separator.cleaner.base_cleaner import BaseCleaner
+from separator.row_segmentator.base_row_segmentator import BaseRowSegmentator
+from separator.letter_segmentator.base_letter_segmentator import BaseLetterSegmentator
+from separator.resizer.base_resizer import BaseResizer
+from separator.recognizer.base_recognizer import BaseRecognizer
+
 class ocr:
-    def __init__(self, binarizer, cleaner, row_separator, letter_separator, image_path, save_path):
+    def __init__(self, binarizer: BaseBinarizer, cleaner: BaseCleaner, row_separator: BaseRowSegmentator, letter_separator: BaseLetterSegmentator,      resizer: BaseResizer, recognizer: BaseRecognizer, image_path, save_path):
         self.binarizer = binarizer
         self.cleaner = cleaner
         self.row_separator = row_separator
         self.letter_separator = letter_separator
+        self.resizer = resizer
+        self.recognizer = recognizer
 
         self.image = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
         self.bin_image = None
@@ -22,7 +31,23 @@ class ocr:
 
         for row in self.rows:
             row.letters = self.letter_separator.letter_segmentation(row)
-        return self
+
+        scale = util.calculate_resize_scale(self.rows)
+        for row in self.rows:
+            for letter in row.letters:
+                letter = self.resizer.resize(letter, scale)
+
+        output = ""
+        for row in self.rows:
+            for letter in row.letters:
+                output += self.recognizer.recognize(letter)
+
+                if letter.space_after:
+                    output += " "
+            
+            output += " "
+
+        return output
 
     def show(self, windowName):
         cv2.imshow(windowName, self.image)
@@ -46,27 +71,4 @@ class ocr:
         for i in range(len(self.rows)):
             self.rows[i].save_letters(filename)
         
-        return self
-    
-    def resize(self):
-        min_scale = float('inf')
-        for row in self.rows:
-            for letter in row.letters:
-                original_height, original_width = letter.char.shape
-
-                if original_width == 0 or original_height == 0:
-                    print(f"Figyelmeztetés: Üres betű észlelve! Kihagyva. ({original_width}x{original_height})")
-                    continue  # Kihagyjuk ezt a betűt
-
-                scale = min(45 / original_width, 45 / original_height)
-                if scale < min_scale:
-                    min_scale = scale
-
-        for row in self.rows:
-            for letter in row.letters:
-                if letter.char.shape[0] == 0 or letter.char.shape[1] == 0:
-                    continue
-                
-                letter.resize(min_scale)
-
         return self

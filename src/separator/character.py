@@ -65,36 +65,5 @@ class character:
             self.char = np.clip(self.char, 0, 255).astype(np.uint8)
         print(f"{self.row_num} : {self.char_num}")
         return output
-    
-    def resize(self, scale):
-        self.save_letter("../images/tmp/letter")
-
-        original_height, original_width = self.char.shape
-
-        target_height = 64
-        target_width = 64
-        
-        new_width = int(original_width * scale)
-        new_height = int(original_height * scale)
-
-        if new_height < 15 and new_width < 15:
-            scale = min(15 / original_width, 15 / original_height)
-            new_height = int(original_height * scale)
-            new_width = int(original_width * scale)
-
-        result = np.full((target_width, target_height), 255, dtype=np.uint8)
-        if new_width >= 15 or new_height >= 15:
-            resized_image = cv2.resize(self.char, (new_width, new_height), interpolation=cv2.INTER_LINEAR)
-
-            x_center = (target_width - resized_image.shape[1]) // 2
-            y_center = (target_height - resized_image.shape[0]) // 2
-
-
-            result[y_center:y_center + resized_image.shape[0], 
-                x_center:x_center + resized_image.shape[1]] = resized_image
-        
-
-        self.char = result
-        #_, self.char = cv2.threshold(self.char, 128, 255, cv2.THRESH_BINARY)
 
 
