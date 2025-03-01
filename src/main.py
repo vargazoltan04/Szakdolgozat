@@ -27,8 +27,8 @@ def main():
     row_segmentator = RowSegmentator()
     letter_segmentator = LetterSegmentator()
     resizer = Resizer()
-    recognizer = Recognizer(58, "./network/model_weights_58_15_35_45_kisnagybetu.pth", "./network/index_class_mapping.json")
-    OCR = ocr.ocr(binarizer, cleaner, row_segmentator, letter_segmentator, resizer, recognizer, "../images/input/input_consolas.png", "../images/")
+    recognizer = Recognizer(58, "./network/model_weights.pth", "./network/index_class_mapping.json")
+    OCR = ocr.ocr(binarizer, cleaner, row_segmentator, letter_segmentator, resizer, recognizer, "../images/input/test01.png", "../images/")
     
     output = OCR.run()
     OCR.save_rows("rows/row").save_letters("../images/letters/").saveim_bin("binarized_image/im.png")
@@ -38,10 +38,11 @@ def main():
     with open("../output/output.txt", "w") as file:
         file.write(output)
 
-    visualizer = Visualizer("../images/output/")
-    visualizer.visualize_confusion_matrix(input.replace(" ", ""), output.replace(" ", ""), "confusion_matrix.png", True)
+    #visualizer = Visualizer("../images/output/")
+    #visualizer.visualize_confusion_matrix(input.replace(" ", ""), output.replace(" ", ""), "confusion_matrix.png", True)
 
-    print("Levenshtein távolság:", textdistance.levenshtein(input.replace(" ", ""), output.replace(" ", "")))
+    print(output)
+    #print("Levenshtein távolság:", textdistance.levenshtein(input.replace(" ", ""), output.replace(" ", "")))
 
 
 

@@ -9,7 +9,6 @@ class character:
         x, y, w, h = cv2.boundingRect(coords)
 
         print(f"row_num: {row_num} \t| char_num: {char_num} \t| char: {char.shape} \t| bin_char: {bin_char.shape} \t| inverted: {inverted.shape}")
-
         self.char = char[y:y+h, x:x+w]  #kivágja a betűt, csak a lényeg marad meg
         self.bin_char = bin_char[y:y+h, x:x+w]
         self.inverted = cv2.bitwise_not(self.bin_char) #Újra invertálja, hogy a méretarányok megmaradjanak
@@ -42,7 +41,7 @@ class character:
         return True
     
     def separate_incorrect_letters(self):
-        print(self.row_num, self.char_num)
+        #print(self.row_num, self.char_num)
         output = []
         num_labels, labels, stats, centroids = cv2.connectedComponentsWithStats(self.inverted, connectivity=8)
 
@@ -63,7 +62,7 @@ class character:
 
         if self.char.dtype != np.uint8:
             self.char = np.clip(self.char, 0, 255).astype(np.uint8)
-        print(f"{self.row_num} : {self.char_num}")
+        #print(f"{self.row_num} : {self.char_num}")
         return output
 
 

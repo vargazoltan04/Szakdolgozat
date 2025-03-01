@@ -26,7 +26,7 @@ class Visualizer(BaseVisualizer):
                cm = cm.astype('float') / cm.sum(axis=1, keepdims=True)  # Normalize row-wise
                cm = np.nan_to_num(cm)  # Replace NaN values (from division by zero) with 0
 
-          print(cm)
+          #print(cm)
 
           # Ábra méretének beállítása
           plt.figure(figsize=(6,5))

@@ -59,18 +59,12 @@ for folder in folders:
         x, y, w, h = cv2.boundingRect(coords) #előtér pixelek befoglaló téglalap
 
         image_no_padding = image[y:y+h, x:x+w] #kivágja a befoglaló téglalapot (magát a betűt)
-        rng = range(15, 51, 5)
-        #if folder in lowercase:
-        #    rng = range(15, 35, 3)
-        #elif folder in uppercase:
-        #    rng = range(35, 45, 3)
-        #else:
-        #    rng = range(15, 45, 3)
+        rng = range(15, 56, 5)
 
         if folder in samelower:
-            rng = range(15, 31, 5)
+            rng = range(15, 36, 5)
         elif folder in sameupper:
-            rng = range(30, 51, 5)
+            rng = range(36, 47, 5)
 
         colors = [0, 75, 150]
         for i in rng:

@@ -7,7 +7,7 @@ class Resizer(BaseResizer):
     def resize(self, char, scale):
           original_height, original_width = char.char.shape
 
-          if original_width == 0 or original_height == 0:
+          if original_width == 0 or original_height == 0 and char.row_num == 0:
                print(f"Figyelmeztetés: Üres betű észlelve! Kihagyva. ({original_width}x{original_height})")
                return None # Kihagyjuk ezt a betűt
           
@@ -16,8 +16,9 @@ class Resizer(BaseResizer):
 
           new_width = int(original_width * scale)
           new_height = int(original_height * scale)
+
           if new_height < 15 and new_width < 15:
-               scale = min(15 / original_width, 15 / original_height)
+               scale = min(15 / original_width, 15 / original_height) + 1
                new_height = int(original_height * scale)
                new_width = int(original_width * scale)
           result = np.full((target_width, target_height), 255, dtype=np.uint8)

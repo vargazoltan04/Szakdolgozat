@@ -53,5 +53,4 @@ class LetterSegmentator(BaseLetterSegmentator):
                 output += sep_letters
                 offset += len(sep_letters) - 1
 
-
         return output
