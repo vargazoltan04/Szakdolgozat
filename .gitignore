@@ -3,9 +3,9 @@ images/input/*
 images/letters/*
 images/rows/*
 images/temp/*
+images/output/*
 train_data
-src/*/__pycache__*
+__pycache__/
 src/network/model_weights*
 jegyzet.txt
 temp/*
-output
