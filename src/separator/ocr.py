@@ -1,5 +1,5 @@
 from separator import row
-import util.util as util
+from util import util as util
 import cv2
 import numpy as np
 
@@ -11,7 +11,7 @@ from separator.resizer.base_resizer import BaseResizer
 from separator.recognizer.base_recognizer import BaseRecognizer
 
 class ocr:
-    def __init__(self, binarizer: BaseBinarizer, cleaner: BaseCleaner, row_separator: BaseRowSegmentator, letter_separator: BaseLetterSegmentator,      resizer: BaseResizer, recognizer: BaseRecognizer, image_path, save_path):
+    def __init__(self, binarizer: BaseBinarizer, cleaner: BaseCleaner, row_separator: BaseRowSegmentator, letter_separator: BaseLetterSegmentator, resizer: BaseResizer, recognizer: BaseRecognizer, image_path, save_path):
         self.binarizer = binarizer
         self.cleaner = cleaner
         self.row_separator = row_separator
@@ -34,7 +34,7 @@ class ocr:
 
 
 
-        scale = util.calculate_resize_scale(self.rows)
+        scale = util.calculate_resize_scale(self.rows, self.resizer.target_char_size)
         for row in self.rows:
             for letter in row.letters:
                 letter = self.resizer.resize(letter, scale)

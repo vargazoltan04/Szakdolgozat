@@ -32,8 +32,8 @@ sameupper = ['CC', 'CO', 'CP', 'CS', 'CU', 'CV', 'CW', 'CX', 'CZ']
 
 lowercase = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
 uppercase = ['CA', 'CB', 'CC', 'CD', 'CE', 'CF', 'CG', 'CH', 'CI', 'CJ', 'CK', 'CL', 'CM', 'CN', 'CO', 'CP', 'CQ', 'CR', 'CS', 'CT', 'CU', 'CV', 'CW', 'CX', 'CY', 'CZ']
-path = "../../train_data/data/"
-output_path = "../../train_data/data/"
+path = "C:/Szakdoga/data"
+output_path = "C:/Szakdoga/data"
 folders = util.list_folders(path)
 
 output = []
@@ -59,12 +59,12 @@ for folder in folders:
         x, y, w, h = cv2.boundingRect(coords) #előtér pixelek befoglaló téglalap
 
         image_no_padding = image[y:y+h, x:x+w] #kivágja a befoglaló téglalapot (magát a betűt)
-        rng = range(15, 56, 5)
+        rng = range(15, 45, 3)
 
         if folder in samelower:
-            rng = range(15, 36, 5)
+            rng = range(15, 36, 2)
         elif folder in sameupper:
-            rng = range(36, 47, 5)
+            rng = range(36, 51, 2)
 
         colors = [0, 75, 150]
         for i in rng:
