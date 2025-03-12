@@ -30,7 +30,7 @@ class ocr:
         for row in self.rows:
             row.letters = self.letter_separator.letter_segmentation(row)
 
-        scale = util.calculate_resize_scale(self.rows)
+        scale = util.calculate_resize_scale(self.rows, self.resizer.target_char_size)
         for row in self.rows:
             for letter in row.letters:
                 letter = self.resizer.resize(letter, scale)

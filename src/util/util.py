@@ -73,13 +73,17 @@ def calculate_resize_scale(rows, target_size):
             original_height, original_width = letter.char.shape
 
             if original_width == 0 or original_height == 0:
-               print(f"Figyelmeztetés: Üres betű észlelve! Kihagyva. ({original_width}x{original_height})")
-               continue
+                #print(f"Figyelmeztetés: Üres betű észlelve! Kihagyva. ({original_width}x{original_height})")
+                continue
+            
+            if original_width < 15 or original_height < 15:
+                #print(f"Figyelmeztetés: Túl kicsi betű észlelve! Kihagyva. ({original_width}x{original_height})")
+                continue
             
             scale = min(target_size / original_width, target_size / original_height)
             if scale < min_scale:
                 min_scale = scale
-        print(min_scale)
+        #print(min_scale)
 
     return min_scale
 

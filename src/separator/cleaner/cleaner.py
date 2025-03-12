@@ -8,6 +8,7 @@ class Cleaner(BaseCleaner):
     def delete_small_components(self, image, min_size):
         image_inverted = cv2.bitwise_not(image)
         num_labels, labels = cv2.connectedComponents(image_inverted)
+
         sizes = np.bincount(labels.ravel())
         for label in range(0, num_labels):
             if sizes[label] < min_size:

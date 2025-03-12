@@ -16,12 +16,9 @@ class Visualizer(BaseVisualizer):
     def __init__(self, save_path):
          self.save_path = save_path
    
-    def visualize_confusion_matrix(self, true, prediction, normalize = False):
-        # 1. Karakterek illesztése DTW-vel
-        aligned_pairs = self.align_texts_levenshtein(true, prediction)
-
+    def visualize_confusion_matrix(self, labels, true, prediction, normalize = False):
         # 2. Konfúziós mátrix készítése
-        conf_matrix, labels = self.generate_confusion_matrix(aligned_pairs, normalize)
+        conf_matrix, labels = self.generate_confusion_matrix(labels, true, prediction, normalize)
 
         # 3. Megjelenítés
         self.plot_confusion_matrix(conf_matrix, labels, normalize)
@@ -73,17 +70,18 @@ class Visualizer(BaseVisualizer):
     
         return list(zip(aligned_original, aligned_ocr))
     
-    def generate_confusion_matrix(self, aligned_pairs, normalize):
+    def generate_confusion_matrix(self, labels, true, prediction, normalize):
+        aligned_pairs = self.align_texts_levenshtein(true, prediction)
         """Konfúziós mátrix létrehozása az OCR hibákból."""
         confusion_dict = defaultdict(int)
     
         for orig, ocr in aligned_pairs:
             confusion_dict[(orig, ocr)] += 1  # Összesítjük a tévesztéseket
     
-        chars = sorted(set(k for pair in confusion_dict.keys() for k in pair))  # Egyedi karakterek
+        #chars = sorted(set(k for pair in confusion_dict.keys() for k in pair))  # Egyedi karakterek
     
-        char_to_idx = {char: i for i, char in enumerate(chars)}  # Indexelés
-        matrix_size = len(chars)
+        char_to_idx = {char: i for i, char in enumerate(labels)}  # Indexelés
+        matrix_size = len(labels)
         confusion_matrix = np.zeros((matrix_size, matrix_size), dtype=int)
     
         for (orig, ocr), count in confusion_dict.items():
@@ -95,18 +93,18 @@ class Visualizer(BaseVisualizer):
             confusion_matrix = confusion_matrix / row_sums
 
     
-        return confusion_matrix, chars
+        return confusion_matrix
     
     def plot_confusion_matrix(self, conf_matrix, labels, normalize):
         labels = ['space' if x==' ' else x for x in labels]
         """Megjeleníti a konfúziós mátrixot hőtérképként."""
-        fig, ax = plt.subplots()
+        fig, ax = plt.subplots(figsize=(20,20))
         ax.xaxis.set_label_position('top')
         ax.xaxis.set_ticks_position('top')
 
         fmt = ".2f" if normalize else "d"
 
-        sns.heatmap(conf_matrix, annot=True, fmt=fmt, cmap="Blues", xticklabels=labels, yticklabels=labels)
+        sns.heatmap(conf_matrix, annot=True, fmt=fmt, cmap="Blues", xticklabels=labels, yticklabels=labels, annot_kws={"size": 6})
         #plt.yticks(rotation=90)
         plt.xlabel("OCR kimenet")
         plt.ylabel("Eredeti karakter")
