@@ -1,3 +1,5 @@
+import os
+
 #Megkeresi a minimumpontokat egy tömbben (csak akkor találja meg, ha azok 0-k)
 #ha több van közvetlen egymás mellett, akkor a legutolsó pontot találja meg
 def find_local_minimum_points(arr):
@@ -64,24 +66,38 @@ def calculate_spaces_length(rows):
     for r in rows:
         r.avg = avg 
 
-def calculate_resize_scale(rows):
+def calculate_resize_scale(rows, target_size):
     min_scale = float('inf')
     for row in rows:
         for letter in row.letters:
             original_height, original_width = letter.char.shape
 
             if original_width == 0 or original_height == 0:
-                print(f"Figyelmeztetés: Üres betű észlelve! Kihagyva. ({original_width}x{original_height})")
-                continue
+               print(f"Figyelmeztetés: Üres betű észlelve! Kihagyva. ({original_width}x{original_height})")
+               continue
             
-            if original_width < 15 or original_height < 15:
-                print(f"Figyelmeztetés: Túl kicsi betű észlelve! Kihagyva. ({original_width}x{original_height})")
-                continue
-
-            scale = min(45 / original_width, 45 / original_height)
-
+            scale = min(target_size / original_width, target_size / original_height)
             if scale < min_scale:
                 min_scale = scale
         print(min_scale)
 
     return min_scale
+
+def list_folders(path):
+    return [name for name in os.listdir(path) if os.path.isdir(os.path.join(path, name))]
+
+def list_files(path):
+    return [f for f in os.listdir(path) if os.path.isfile(os.path.join(path, f))]
+
+def calculate_black_white_ratio(image): 
+    height, width = image.shape
+    
+    count_black_pixels = 0
+    for row in range(height):
+        row_data = image[row, :]
+
+        for pixel in row_data:
+            if pixel == 0:
+                count_black_pixels += 1
+
+    return count_black_pixels / (width * height)
