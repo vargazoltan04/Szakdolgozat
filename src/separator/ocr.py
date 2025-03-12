@@ -20,19 +20,15 @@ class ocr:
         self.recognizer = recognizer
 
         self.image = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
-        self.bin_image = None
         self.save_path = save_path
         self.rows: row = []
 
     def run(self):
-        self.bin_image = self.binarizer.binarize(self.image, 128)
-        self.image, self.bin_image = self.cleaner.delete_small_components(self.image, self.bin_image, 5)
-        self.rows = self.row_separator.row_segmentation(self.image, self.bin_image)
-
+        self.image = self.binarizer.binarize(self.image, 128)
+        self.image = self.cleaner.delete_small_components(self.image, 5)
+        self.rows = self.row_separator.row_segmentation(self.image)
         for row in self.rows:
             row.letters = self.letter_separator.letter_segmentation(row)
-
-
 
         scale = util.calculate_resize_scale(self.rows)
         for row in self.rows:
@@ -58,10 +54,6 @@ class ocr:
     
     def saveim(self, filename):
         cv2.imwrite(self.save_path + filename, self.image)
-        return self
-    
-    def saveim_bin(self, filename):
-        cv2.imwrite(self.save_path + filename, self.bin_image)
         return self
     
     def save_rows(self, filename):

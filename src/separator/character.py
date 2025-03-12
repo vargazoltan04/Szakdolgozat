@@ -3,15 +3,14 @@ import numpy as np
 import cv2
 
 class character:
-    def __init__(self, char, bin_char, space_after, row_num, char_num):
-        inverted = cv2.bitwise_not(bin_char) ##Megkeresi a betűnek a befoglaló téglalapját 
+    def __init__(self, char, space_after, row_num, char_num):
+        inverted = cv2.bitwise_not(char) ##Megkeresi a betűnek a befoglaló téglalapját 
         coords = cv2.findNonZero(inverted)
         x, y, w, h = cv2.boundingRect(coords)
 
-        print(f"row_num: {row_num} \t| char_num: {char_num} \t| char: {char.shape} \t| bin_char: {bin_char.shape} \t| inverted: {inverted.shape}")
+        print(f"row_num: {row_num} \t| char_num: {char_num} \t| char: {char.shape} \t| inverted: {inverted.shape}")
         self.char = char[y:y+h, x:x+w]  #kivágja a betűt, csak a lényeg marad meg
-        self.bin_char = bin_char[y:y+h, x:x+w]
-        self.inverted = cv2.bitwise_not(self.bin_char) #Újra invertálja, hogy a méretarányok megmaradjanak
+        self.inverted = cv2.bitwise_not(self.char) #Újra invertálja, hogy a méretarányok megmaradjanak
 
         self.row_num = row_num
         self.char_num = char_num
@@ -25,9 +24,9 @@ class character:
         cv2.imwrite(filename + f"row{self.row_num}_letter{self.char_num}.png", self.char)
 
     def is_correct_letter(self):
-        horizontal_projection_letter = util.horizontal_projection(self.bin_char)
+        horizontal_projection_letter = util.horizontal_projection(self.char)
         horizontal_projection_letter = np.array(horizontal_projection_letter).reshape(1, -1).astype(np.uint8)
-        vertical_projection_letter = util.vertical_projection(self.bin_char)
+        vertical_projection_letter = util.vertical_projection(self.char)
         vertical_projection_letter = np.array(vertical_projection_letter).reshape(1, -1).astype(np.uint8)
         
         num_labels_horizontal, labels_horizontal = cv2.connectedComponents(horizontal_projection_letter)
@@ -54,9 +53,8 @@ class character:
             #cv2.rectangle(self.char, (x, y), (x+w, y+h), (255, 0, 0), 1)
 
             temp_im = self.char[y:y+h, x:x+w]
-            temp_im_bin = self.bin_char[y:y+h, x:x+w]
 
-            temp_char = character(temp_im, temp_im_bin, False, self.row_num, self.char_num + (i - 1))
+            temp_char = character(temp_im, False, self.row_num, self.char_num + (i - 1))
             output.append(temp_char)
         
 

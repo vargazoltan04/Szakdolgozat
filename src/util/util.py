@@ -45,7 +45,7 @@ def calculate_spaces_length(rows):
     sum = 0
     count = 0
     for r in rows:
-        image = r.bin_row
+        image = r.row
         projection = vertical_projection(image)
 
         sum_in_row = 0
@@ -71,11 +71,17 @@ def calculate_resize_scale(rows):
             original_height, original_width = letter.char.shape
 
             if original_width == 0 or original_height == 0:
-               print(f"Figyelmeztetés: Üres betű észlelve! Kihagyva. ({original_width}x{original_height})")
-               continue
+                print(f"Figyelmeztetés: Üres betű észlelve! Kihagyva. ({original_width}x{original_height})")
+                continue
             
+            if original_width < 15 or original_height < 15:
+                print(f"Figyelmeztetés: Túl kicsi betű észlelve! Kihagyva. ({original_width}x{original_height})")
+                continue
+
             scale = min(45 / original_width, 45 / original_height)
+
             if scale < min_scale:
                 min_scale = scale
+        print(min_scale)
 
     return min_scale
