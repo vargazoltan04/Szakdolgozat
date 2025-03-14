@@ -12,12 +12,14 @@ class row:
         self.avg = avg
         self.offset = 0
 
-    def save_row(self, filename):
-        cv2.imwrite(filename + f"{self.row_num}.png", self.row)
+    def save_row(self, path):
+        path = f"{path}/row{self.row_num}.png"
+        util.create_path(path)
+        cv2.imwrite(path, self.row)
     
-    def save_letters(self, filename):
+    def save_letters(self, path):
         for i in range(len(self.letters)):
-            self.letters[i].save_letter(filename)
+            self.letters[i].save_letter(path)
     
     def correct_letter_mistake(self):
         pass

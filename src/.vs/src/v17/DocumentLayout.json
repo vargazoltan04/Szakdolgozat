@@ -7,20 +7,24 @@
       "RelativeMoniker": "D:0:0:{EC781D06-CD5E-49FE-B74C-4233A679B34E}|src.pyproj|solutionrelative:main.py||{8B382828-6202-11D1-8870-0000F87579D2}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{EC781D06-CD5E-49FE-B74C-4233A679B34E}|src.pyproj|D:\\egyetem\\Szakdolgozat\\src\\separator\\resizer\\resizer.py||{8B382828-6202-11D1-8870-0000F87579D2}",
-      "RelativeMoniker": "D:0:0:{EC781D06-CD5E-49FE-B74C-4233A679B34E}|src.pyproj|solutionrelative:separator\\resizer\\resizer.py||{8B382828-6202-11D1-8870-0000F87579D2}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{EC781D06-CD5E-49FE-B74C-4233A679B34E}|src.pyproj|D:\\egyetem\\Szakdolgozat\\src\\separator\\resizer\\base_resizer.py||{8B382828-6202-11D1-8870-0000F87579D2}",
-      "RelativeMoniker": "D:0:0:{EC781D06-CD5E-49FE-B74C-4233A679B34E}|src.pyproj|solutionrelative:separator\\resizer\\base_resizer.py||{8B382828-6202-11D1-8870-0000F87579D2}"
+      "AbsoluteMoniker": "D:0:0:{EC781D06-CD5E-49FE-B74C-4233A679B34E}|src.pyproj|D:\\egyetem\\Szakdolgozat\\src\\separator\\ocr.py||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{EC781D06-CD5E-49FE-B74C-4233A679B34E}|src.pyproj|solutionrelative:separator\\ocr.py||{8B382828-6202-11D1-8870-0000F87579D2}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{EC781D06-CD5E-49FE-B74C-4233A679B34E}|src.pyproj|D:\\egyetem\\Szakdolgozat\\src\\prepare_train_data\\prepare_train_data.py||{8B382828-6202-11D1-8870-0000F87579D2}",
       "RelativeMoniker": "D:0:0:{EC781D06-CD5E-49FE-B74C-4233A679B34E}|src.pyproj|solutionrelative:prepare_train_data\\prepare_train_data.py||{8B382828-6202-11D1-8870-0000F87579D2}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{EC781D06-CD5E-49FE-B74C-4233A679B34E}|src.pyproj|D:\\egyetem\\Szakdolgozat\\src\\separator\\ocr.py||{8B382828-6202-11D1-8870-0000F87579D2}",
-      "RelativeMoniker": "D:0:0:{EC781D06-CD5E-49FE-B74C-4233A679B34E}|src.pyproj|solutionrelative:separator\\ocr.py||{8B382828-6202-11D1-8870-0000F87579D2}"
+      "AbsoluteMoniker": "D:0:0:{EC781D06-CD5E-49FE-B74C-4233A679B34E}|src.pyproj|D:\\egyetem\\Szakdolgozat\\src\\separator\\resizer\\base_resizer.py||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{EC781D06-CD5E-49FE-B74C-4233A679B34E}|src.pyproj|solutionrelative:separator\\resizer\\base_resizer.py||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EC781D06-CD5E-49FE-B74C-4233A679B34E}|src.pyproj|D:\\egyetem\\Szakdolgozat\\src\\separator\\resizer\\resizer.py||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{EC781D06-CD5E-49FE-B74C-4233A679B34E}|src.pyproj|solutionrelative:separator\\resizer\\resizer.py||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EC781D06-CD5E-49FE-B74C-4233A679B34E}|src.pyproj|D:\\egyetem\\Szakdolgozat\\src\\separator\\visualizer\\visualizer.py||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{EC781D06-CD5E-49FE-B74C-4233A679B34E}|src.pyproj|solutionrelative:separator\\visualizer\\visualizer.py||{8B382828-6202-11D1-8870-0000F87579D2}"
     }
   ],
   "DocumentGroupContainers": [
@@ -30,11 +34,24 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 4,
+          "SelectedChildIndex": 5,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 5,
+              "Title": "visualizer.py",
+              "DocumentMoniker": "D:\\egyetem\\Szakdolgozat\\src\\separator\\visualizer\\visualizer.py",
+              "RelativeDocumentMoniker": "separator\\visualizer\\visualizer.py",
+              "ToolTip": "D:\\egyetem\\Szakdolgozat\\src\\separator\\visualizer\\visualizer.py",
+              "RelativeToolTip": "separator\\visualizer\\visualizer.py",
+              "ViewState": "AgIAADoAAAAAAAAAAAAAAH0AAAAFAAAAAAAAAA==",
+              "Icon": "00000000-0000-0000-0000-000000000000.000000|iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAHeSURBVDhPpVMxa1NRFP7ebZLSlgaltNpSVCySRUxL0NAh4FJpHWpxcZAUBEPG/AKHDsVBN5eGrCnoYKCDoDiUCKKBjtZBUZtJ2ojYJr40ue\u002B\u002B47k3VzD0hQr94OOed8853/k47z2cCETk2NAgk8mQDQMhhFjK5/Mb9vEotIDruoEsFovEzVvZbPaWLTcQ9uxCpVLp4l\u002Bk0\u002BlEPB5/wIPm7RVC9uxCMpm0UTdKpRKi0WiCQy3wUt8FCvw7VSNxbRapG4voDwucGgyjXC7bzH84ePt1HysbH/GhWoNstzA1OoSFhZuxQqFg8sfu4FutAd\u002BT8KSEYm7v7GJ0YnLClgYLaAcjU9N4Vx9Dda8OBz7OjwywSNsIXY39vEL7TxWpxv2eO3hWHUZ19xc8ti25UdvXzdpNWH0BDj8JiLOrPXfweOu9mRgRhOXUEPr7IiBfYeacB9HaBNRvQH4f6\u002BlgMERwGxJP7grEoq9shj9Uz\u002BVGpmIi4vXcwdzlcePgzLAuZPiSGw869Jg\u002Biw1Mvw50oLGcuoh71y8h1HwB1Js8UfFLnwScNnBhdYVLWsy1IwK5XM5GHaw9uu0LeSCMddZA32lz7zjOQxMcByK1SPU3O/Rjnai2fkjNz8/5L77TyQJ/AJc67LNf3QeWAAAAAElFTkSuQmCC",
+              "WhenOpened": "2025-03-14T15:21:46.571Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
               "Title": "prepare_train_data.py",
               "DocumentMoniker": "D:\\egyetem\\Szakdolgozat\\src\\prepare_train_data\\prepare_train_data.py",
               "RelativeDocumentMoniker": "prepare_train_data\\prepare_train_data.py",
@@ -47,7 +64,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "base_resizer.py",
               "DocumentMoniker": "D:\\egyetem\\Szakdolgozat\\src\\separator\\resizer\\base_resizer.py",
               "RelativeDocumentMoniker": "separator\\resizer\\base_resizer.py",
@@ -60,7 +77,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 4,
               "Title": "resizer.py",
               "DocumentMoniker": "D:\\egyetem\\Szakdolgozat\\src\\separator\\resizer\\resizer.py",
               "RelativeDocumentMoniker": "separator\\resizer\\resizer.py",
@@ -73,13 +90,13 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 1,
               "Title": "ocr.py",
               "DocumentMoniker": "D:\\egyetem\\Szakdolgozat\\src\\separator\\ocr.py",
               "RelativeDocumentMoniker": "separator\\ocr.py",
               "ToolTip": "D:\\egyetem\\Szakdolgozat\\src\\separator\\ocr.py",
               "RelativeToolTip": "separator\\ocr.py",
-              "ViewState": "AgIAAA4AAAAAAAAAAAAgwCcAAAA7AAAAAAAAAA==",
+              "ViewState": "AgIAAA4AAAAAAAAAAAAgwCgAAAAdAAAAAAAAAA==",
               "Icon": "00000000-0000-0000-0000-000000000000.000000|iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAHeSURBVDhPpVMxa1NRFP7ebZLSlgaltNpSVCySRUxL0NAh4FJpHWpxcZAUBEPG/AKHDsVBN5eGrCnoYKCDoDiUCKKBjtZBUZtJ2ojYJr40ue\u002B\u002B47k3VzD0hQr94OOed8853/k47z2cCETk2NAgk8mQDQMhhFjK5/Mb9vEotIDruoEsFovEzVvZbPaWLTcQ9uxCpVLp4l\u002Bk0\u002BlEPB5/wIPm7RVC9uxCMpm0UTdKpRKi0WiCQy3wUt8FCvw7VSNxbRapG4voDwucGgyjXC7bzH84ePt1HysbH/GhWoNstzA1OoSFhZuxQqFg8sfu4FutAd\u002BT8KSEYm7v7GJ0YnLClgYLaAcjU9N4Vx9Dda8OBz7OjwywSNsIXY39vEL7TxWpxv2eO3hWHUZ19xc8ti25UdvXzdpNWH0BDj8JiLOrPXfweOu9mRgRhOXUEPr7IiBfYeacB9HaBNRvQH4f6\u002BlgMERwGxJP7grEoq9shj9Uz\u002BVGpmIi4vXcwdzlcePgzLAuZPiSGw869Jg\u002Biw1Mvw50oLGcuoh71y8h1HwB1Js8UfFLnwScNnBhdYVLWsy1IwK5XM5GHaw9uu0LeSCMddZA32lz7zjOQxMcByK1SPU3O/Rjnai2fkjNz8/5L77TyQJ/AJc67LNf3QeWAAAAAElFTkSuQmCC",
               "WhenOpened": "2025-03-07T10:25:19.123Z",
               "EditorCaption": ""
@@ -92,7 +109,7 @@
               "RelativeDocumentMoniker": "main.py",
               "ToolTip": "D:\\egyetem\\Szakdolgozat\\src\\main.py",
               "RelativeToolTip": "main.py",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABkAAABCAAAAAAAAAA==",
+              "ViewState": "AgIAAC4AAAAAAAAAAAAAADQAAABXAAAAAAAAAA==",
               "Icon": "00000000-0000-0000-0000-000000000000.000000|iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAHeSURBVDhPpVMxa1NRFP7ebZLSlgaltNpSVCySRUxL0NAh4FJpHWpxcZAUBEPG/AKHDsVBN5eGrCnoYKCDoDiUCKKBjtZBUZtJ2ojYJr40ue\u002B\u002B47k3VzD0hQr94OOed8853/k47z2cCETk2NAgk8mQDQMhhFjK5/Mb9vEotIDruoEsFovEzVvZbPaWLTcQ9uxCpVLp4l\u002Bk0\u002BlEPB5/wIPm7RVC9uxCMpm0UTdKpRKi0WiCQy3wUt8FCvw7VSNxbRapG4voDwucGgyjXC7bzH84ePt1HysbH/GhWoNstzA1OoSFhZuxQqFg8sfu4FutAd\u002BT8KSEYm7v7GJ0YnLClgYLaAcjU9N4Vx9Dda8OBz7OjwywSNsIXY39vEL7TxWpxv2eO3hWHUZ19xc8ti25UdvXzdpNWH0BDj8JiLOrPXfweOu9mRgRhOXUEPr7IiBfYeacB9HaBNRvQH4f6\u002BlgMERwGxJP7grEoq9shj9Uz\u002BVGpmIi4vXcwdzlcePgzLAuZPiSGw869Jg\u002Biw1Mvw50oLGcuoh71y8h1HwB1Js8UfFLnwScNnBhdYVLWsy1IwK5XM5GHaw9uu0LeSCMddZA32lz7zjOQxMcByK1SPU3O/Rjnai2fkjNz8/5L77TyQJ/AJc67LNf3QeWAAAAAElFTkSuQmCC",
               "WhenOpened": "2025-03-07T08:19:08.835Z",
               "EditorCaption": ""

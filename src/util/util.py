@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 
 #Megkeresi a minimumpontokat egy tömbben (csak akkor találja meg, ha azok 0-k)
 #ha több van közvetlen egymás mellett, akkor a legutolsó pontot találja meg
@@ -105,3 +106,9 @@ def calculate_black_white_ratio(image):
                 count_black_pixels += 1
 
     return count_black_pixels / (width * height)
+
+def create_path(path):
+    if(Path(path).suffix):
+        Path(path).parent.mkdir(parents=True, exist_ok=True)
+    else:
+        Path(path).mkdir(parents=True, exist_ok=True)

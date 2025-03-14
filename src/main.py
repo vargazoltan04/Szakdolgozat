@@ -4,9 +4,12 @@ import separator.character as character
 
 import textdistance
 import numpy as np
+import argparse
+
+
 
 from separator import *
-
+from util import util
 
 from network.model import VGG16
 
@@ -22,59 +25,44 @@ Lorem, ipsum dolor sit amet consectetur adipisicing elit. Recusandae aut quisqua
 
 
 
-def main():
-    binarizer = BinarizerThresh()
-    cleaner = Cleaner()
-    row_segmentator = RowSegmentator()
-    letter_segmentator = LetterSegmentator()
-    resizer = Resizer(45)
+def main(path, output_path):
     recognizer = Recognizer(58, "./network/model_weights_58_15-35-55_kisnagybetu.pth", "./network/index_class_mapping.json")
-    OCR = ocr.ocr(binarizer, cleaner, row_segmentator, letter_segmentator, resizer, recognizer, "../images/input/input_01.png", "../images/")
-    output1 = OCR.run()
-
     binarizer = BinarizerThresh()
     cleaner = Cleaner()
     row_segmentator = RowSegmentator()
     letter_segmentator = LetterSegmentator()
     resizer = Resizer(45)
-    OCR = ocr.ocr(binarizer, cleaner, row_segmentator, letter_segmentator, resizer, recognizer, "../images/input/input_02.png", "../images/")
-    output2 = OCR.run()
-
+    OCR = ocr.ocr(binarizer, cleaner, row_segmentator, letter_segmentator, resizer, recognizer, path, output_path)
+    OCR.run()
     
-    binarizer = BinarizerThresh()
-    cleaner = Cleaner()
-    row_segmentator = RowSegmentator()
-    letter_segmentator = LetterSegmentator()
-    resizer = Resizer(45)
-    OCR = ocr.ocr(binarizer, cleaner, row_segmentator, letter_segmentator, resizer, recognizer, "../images/input/input_03.png", "../images/")
-    output3 = OCR.run()
-
-    labels = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!?.,-: "
-    visualizer: BaseVisualizer = Visualizer("../images/output/")
-    cm = visualizer.generate_confusion_matrix(labels, input1, output1, True)
-    cm += visualizer.generate_confusion_matrix(labels, input2, output2, True)
-    cm += visualizer.generate_confusion_matrix(labels, input3, output3, True)
-    visualizer.plot_confusion_matrix(cm, labels, True)
-    
-    #OCR.save_rows("rows/row").save_letters("../images/letters/")
-
-    #print(len(input))
-    #print(len(output))
-    #with open("../output/output.txt", "w") as file:
-    #    file.write(output)
 
 
    
-    
-
-    #visualizer.visualize_confusion_matrix(input.replace(" ", ""), output.replace(" ", ""), "confusion_matrix.png", True)
-    #visualizer.visualize_confusion_matrix(input.replace(" ", "").lower(), output.replace(" ", "").lower(), "confusion_matrix.png", True)
-
-
+    labels = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!?.,-: "
+    visualizer: BaseVisualizer = Visualizer("../images/output/")
+    # cm = visualizer.generate_confusion_matrix(labels, input1, output1, True)
+    # cm += visualizer.generate_confusion_matrix(labels, input2, output2, True)
+    cm = visualizer.generate_confusion_matrix(labels, input3, OCR.get_output(), True)
+    visualizer.plot_confusion_matrix(cm, labels, True, output_path)
     
     #print("Levenshtein távolság:", textdistance.levenshtein(input.replace(" ", ""), output.replace(" ", "")))
 
-
-
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-p", "--path", help = "The path of the image")
+    parser.add_argument("-op", "--output_path", help = "The output path of the result")
+    args = parser.parse_args()
+
+    if args.path and args.output_path:
+        print("The input image: %s" % args.path)
+        print("The output path: %s" % args.output_path)
+        util.create_path(args.output_path)
+        main(args.path, args.output_path)
+    if args.path and not args.output_path:
+        print("The input image: %s" % args.path)
+        print("The output path: %s" % args.path)
+        util.create_path(args.path)
+        main(args.path, args.path)
+    
+
+    print("Give me a path that I can recognize.")

@@ -20,8 +20,11 @@ class RowSegmentator(BaseRowSegmentator):
         min_points = util.find_local_minimum_points(horizontal_projection)
 
         min_points.append(len(horizontal_projection))
+        image_lines = image.copy()
+        image_lines = cv2.cvtColor(image_lines, cv2.COLOR_GRAY2BGR)
         #Többi sor, illetve fehér sorok törlése
         for i in range(1, len(min_points)):
+            image_lines = cv2.line(image_lines, (0, min_points[i]), (image.shape[1], min_points[i]), (0, 0, 255), 2)
             row_image = image[min_points[i-1]:min_points[i], :]        #Kivágja a képből a sornak a képét
             row_image_inverted = cv2.bitwise_not(row_image)
 
@@ -34,4 +37,4 @@ class RowSegmentator(BaseRowSegmentator):
             output.append(row_im)
 
         util.calculate_spaces_length(output)
-        return output
+        return output, image_lines

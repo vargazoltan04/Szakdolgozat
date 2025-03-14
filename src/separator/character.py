@@ -16,12 +16,13 @@ class character:
         self.char_num = char_num
         self.space_after = space_after
 
-    def save_letter(self, filename):
-
+    def save_letter(self, path):
+        path = f"{path}/row{self.row_num}_letter{self.char_num}.png"
+        util.create_path(path)
         if self.char.shape[0] == 0 or self.char.shape[1] == 0:
             return
 
-        cv2.imwrite(filename + f"row{self.row_num}_letter{self.char_num}.png", self.char)
+        cv2.imwrite(path, self.char)
 
     def is_correct_letter(self):
         horizontal_projection_letter = util.horizontal_projection(self.char)

@@ -1,4 +1,5 @@
 import numpy as np
+import cv2
 
 from abc import ABC, abstractmethod
 
@@ -15,7 +16,11 @@ class LetterSegmentator(BaseLetterSegmentator):
         min_points.append(len(vertical_projection))
         min_points.insert(0, 1)
         offset = 0
+
+        image_lines = row.row.copy()
+        image_lines = cv2.cvtColor(image_lines, cv2.COLOR_GRAY2BGR)
         for i in range(1, len(min_points)):
+            image_lines = cv2.line(image_lines, (min_points[i], 0), (min_points[i], row.row.shape[0]), (0, 0, 255), 2)
             start, end = min_points[i - 1], min_points[i]
 
             if start >= end:  # Ha az intervallum érvénytelen, ugorjuk át
@@ -48,4 +53,4 @@ class LetterSegmentator(BaseLetterSegmentator):
                 output += sep_letters
                 offset += len(sep_letters) - 1
 
-        return output
+        return output, image_lines

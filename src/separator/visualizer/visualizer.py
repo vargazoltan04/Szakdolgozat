@@ -11,6 +11,7 @@ import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
 from collections import defaultdict
+from util import util
 
 class Visualizer(BaseVisualizer):
     def __init__(self, save_path):
@@ -95,7 +96,7 @@ class Visualizer(BaseVisualizer):
     
         return confusion_matrix
     
-    def plot_confusion_matrix(self, conf_matrix, labels, normalize):
+    def plot_confusion_matrix(self, conf_matrix, labels, normalize, save_path):
         labels = ['space' if x==' ' else x for x in labels]
         """Megjeleníti a konfúziós mátrixot hőtérképként."""
         fig, ax = plt.subplots(figsize=(20,20))
@@ -105,12 +106,16 @@ class Visualizer(BaseVisualizer):
         fmt = ".2f" if normalize else "d"
 
         sns.heatmap(conf_matrix, annot=True, fmt=fmt, cmap="Blues", xticklabels=labels, yticklabels=labels, annot_kws={"size": 6})
-        #plt.yticks(rotation=90)
+        plt.yticks(rotation=90)
         plt.xlabel("OCR kimenet")
         plt.ylabel("Eredeti karakter")
 
         
         plt.title("OCR Konfúziós Mátrix")
+        
+        path = f"{save_path}/confusion_matrix.png"
+        util.create_path(path)
+        plt.savefig(path)
         plt.show()
 
 

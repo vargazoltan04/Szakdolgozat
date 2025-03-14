@@ -22,13 +22,15 @@ class ocr:
         self.image = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
         self.save_path = save_path
         self.rows: row = []
+        self.output = ""
 
     def run(self):
         self.image = self.binarizer.binarize(self.image, 128)
         self.image = self.cleaner.delete_small_components(self.image, 5)
-        self.rows = self.row_separator.row_segmentation(self.image)
-        for row in self.rows:
-            row.letters = self.letter_separator.letter_segmentation(row)
+        self.rows, row_lines_red = self.row_separator.row_segmentation(self.image)
+        for i in range(len(self.rows)):
+            self.rows[i].letters, letter_lines_red = self.letter_separator.letter_segmentation(self.rows[i])
+            self.saveim(letter_lines_red, f"/rows_lined/row_lined{i}.png")
 
         scale = util.calculate_resize_scale(self.rows, self.resizer.target_char_size)
         for row in self.rows:
@@ -36,34 +38,49 @@ class ocr:
                 letter = self.resizer.resize(letter, scale)
 
 
-        output = ""
         for row in self.rows:
             for letter in row.letters:
-                output += self.recognizer.recognize(letter)
+                self.output += self.recognizer.recognize(letter)
 
                 if letter.space_after:
-                    output += " "
+                    self.output += " "
             
-            output += " "
+            self.output += " "
 
-        return output
+        self.save_rows(f"{self.save_path}/rows")
+        self.save_letters(f"{self.save_path}/letters")
+        self.save_output("output.txt")
+        self.saveim(row_lines_red, "row_lines_red.png")
 
-    def show(self, windowName):
-        cv2.imshow(windowName, self.image)
+        return self
+
+    def show(self, window_name):
+        cv2.imshow(window_name, self.image)
         return self
     
-    def saveim(self, filename):
-        cv2.imwrite(self.save_path + filename, self.image)
+    def saveim(self, image, file_name):
+        path = f"{self.save_path}/{file_name}"
+        util.create_path(path)
+        cv2.imwrite(path, image)
         return self
     
-    def save_rows(self, filename):
+    def save_rows(self, file_name):
         for i in range(len(self.rows)):
-            self.rows[i].save_row(self.save_path + filename)
+            self.rows[i].save_row(file_name)
 
         return self
     
-    def save_letters(self, filename):
+    def save_letters(self, file_name):
         for i in range(len(self.rows)):
-            self.rows[i].save_letters(filename)
+            self.rows[i].save_letters(file_name)
         
         return self
+    
+    def get_output(self):
+        return self.output
+    
+    def save_output(self, file_name):
+        path = f"{self.save_path}/{file_name}"
+        util.create_path(path)
+        with open(path, "w") as file:
+            file.write(self.output)
