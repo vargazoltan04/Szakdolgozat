@@ -9,8 +9,8 @@ from util import util
 from separator import row
 
 class RowSegmentatorNew(BaseRowSegmentator):
-    #Képen a sorok szegmentálása
-    #Úgy éri el, hogy a vízszintes vetületen ahol van 0 érték, ott van sortörés
+    #Kï¿½pen a sorok szegmentï¿½lï¿½sa
+    #ï¿½gy ï¿½ri el, hogy a vï¿½zszintes vetï¿½leten ahol van 0 ï¿½rtï¿½k, ott van sortï¿½rï¿½s
     def row_segmentation(self, image):
         kernel = np.ones((10, 40), np.uint8) 
 
@@ -30,16 +30,16 @@ class RowSegmentatorNew(BaseRowSegmentator):
         for i in range(1, num_labels):
             x, y, w, h, area = stats[i]
             row_image = image[y:y+h, x:x+w]
-            row_image = util.delete_small_components(row_image, 5)
+            row_image = util.delete_small_components(row_image, 15)
 
             #Draw rectangle: (x, y) top-left and (x+w, y+h) bottom-right
             cv2.rectangle(rows_rect_image, (x, y), (x + w, y + h), (0, 0, 255), 2)
 
             row_image_inverted = cv2.bitwise_not(row_image)
-            letter_pixels = cv2.findNonZero(row_image_inverted) #Megkeresi a sorban a szöveg befoglaló téglalapját
+            letter_pixels = cv2.findNonZero(row_image_inverted) #Megkeresi a sorban a szï¿½veg befoglalï¿½ tï¿½glalapjï¿½t
             x, y, w, h = cv2.boundingRect(letter_pixels)
             
-            row_image = row_image[y:y+h, x:x+w] #Kivágja a szöveget belõle
+            row_image = row_image[y:y+h, x:x+w] #Kivï¿½gja a szï¿½veget belï¿½le
             row_im: row = row.row(row_image, 0, i - 1)
             rows.append(row_im)
 

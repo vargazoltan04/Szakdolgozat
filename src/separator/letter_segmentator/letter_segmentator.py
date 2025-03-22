@@ -1,6 +1,7 @@
 import numpy as np
 import cv2
 
+import matplotlib.pyplot as plt
 from abc import ABC, abstractmethod
 
 from separator import character
@@ -17,6 +18,8 @@ class LetterSegmentator(BaseLetterSegmentator):
         min_points.insert(0, 1)
         offset = 0
 
+        #plt.imshow(row.row)
+        #plt.show()
         image_lines = row.row.copy()
         image_lines = cv2.cvtColor(image_lines, cv2.COLOR_GRAY2BGR)
         for i in range(1, len(min_points)):
@@ -27,6 +30,8 @@ class LetterSegmentator(BaseLetterSegmentator):
                 continue
 
             letter = row.row[:, start:end]  # Kivágja a betű képét
+            #plt.imshow(letter)
+            #plt.show()
 
             non_white_cols = np.any(letter < 255, axis=0)   #Megkeresi az üres oszlopokat
 
