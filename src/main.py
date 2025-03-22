@@ -5,10 +5,11 @@ import separator.character as character
 import textdistance
 import numpy as np
 import argparse
-
+from pathlib import Path
 
 
 from separator import *
+from separator.row_segmentator.row_segmentator_new import RowSegmentatorNew
 from util import util
 
 from network.model import VGG16
@@ -32,6 +33,7 @@ def main(path, output_path):
     row_segmentator = RowSegmentator()
     letter_segmentator = LetterSegmentator()
     resizer = Resizer(45)
+
     OCR = ocr.ocr(binarizer, cleaner, row_segmentator, letter_segmentator, resizer, recognizer, path, output_path)
     OCR.run()
     
@@ -45,7 +47,7 @@ def main(path, output_path):
     cm = visualizer.generate_confusion_matrix(labels, input3, OCR.get_output(), True)
     visualizer.plot_confusion_matrix(cm, labels, True, output_path)
     
-    #print("Levenshtein távolság:", textdistance.levenshtein(input.replace(" ", ""), output.replace(" ", "")))
+    print("Levenshtein távolság:", textdistance.levenshtein(input3, OCR.get_output()))
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -62,7 +64,13 @@ if __name__ == "__main__":
         print("The input image: %s" % args.path)
         print("The output path: %s" % args.path)
         util.create_path(args.path)
-        main(args.path, args.path)
+
+        path_obj = Path(args.path)
+        if path_obj.suffix:
+            main(args.path, path_obj.parent)
+        else:
+            print("Give me an input image!")
+
     
 
     print("Give me a path that I can recognize.")

@@ -1,4 +1,7 @@
 import os
+import numpy as np
+import cv2
+
 from pathlib import Path
 
 #Megkeresi a minimumpontokat egy tömbben (csak akkor találja meg, ha azok 0-k)
@@ -112,3 +115,15 @@ def create_path(path):
         Path(path).parent.mkdir(parents=True, exist_ok=True)
     else:
         Path(path).mkdir(parents=True, exist_ok=True)
+
+def delete_small_components(image, min_size):
+        image_inverted = cv2.bitwise_not(image)
+        num_labels, labels = cv2.connectedComponents(image_inverted)
+
+        sizes = np.bincount(labels.ravel())
+        for label in range(0, num_labels):
+            if sizes[label] < min_size:
+                labels[labels == label] = 0
+
+        image = np.where(labels > 0, image, 255).astype(np.uint8)
+        return image

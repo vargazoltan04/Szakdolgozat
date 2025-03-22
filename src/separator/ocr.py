@@ -26,8 +26,9 @@ class ocr:
 
     def run(self):
         self.image = self.binarizer.binarize(self.image, 128)
-        self.image = self.cleaner.delete_small_components(self.image, 5)
+        self.image = util.delete_small_components(self.image, 5)
         self.rows, row_lines_red = self.row_separator.row_segmentation(self.image)
+        #self.rows, rows_rect_image, rows_dilated = self.row_separator.row_segmentation(self.image)
         for i in range(len(self.rows)):
             self.rows[i].letters, letter_lines_red = self.letter_separator.letter_segmentation(self.rows[i])
             self.saveim(letter_lines_red, f"/rows_lined/row_lined{i}.png")
@@ -51,6 +52,8 @@ class ocr:
         self.save_letters(f"{self.save_path}/letters")
         self.save_output("output.txt")
         self.saveim(row_lines_red, "row_lines_red.png")
+        #self.saveim(rows_rect_image, "rows_bounding_rects.png")
+        #self.saveim(rows_dilated, "rows_dilated.png")
 
         return self
 

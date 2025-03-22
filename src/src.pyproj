@@ -38,6 +38,7 @@
     <Compile Include="separator\row.py" />
     <Compile Include="separator\row_segmentator\base_row_segmentator.py" />
     <Compile Include="separator\row_segmentator\row_segmentator.py" />
+    <Compile Include="separator\row_segmentator\row_segmentator_new.py" />
     <Compile Include="separator\visualizer\base_visualizer.py" />
     <Compile Include="separator\visualizer\visualizer.py" />
     <Compile Include="separator\__init__.py" />
