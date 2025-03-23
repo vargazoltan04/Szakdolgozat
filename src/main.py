@@ -47,10 +47,10 @@ def main(path, output_path):
     visualizer: BaseVisualizer = Visualizer("../images/output/")
     # cm = visualizer.generate_confusion_matrix(labels, input1, output1, True)
     # cm += visualizer.generate_confusion_matrix(labels, input2, output2, True)
-    cm = visualizer.generate_confusion_matrix(labels, input3, OCR.get_output(), True)
+    cm = visualizer.generate_confusion_matrix(labels, input2, OCR.get_output(), True)
     visualizer.plot_confusion_matrix(cm, labels, True, output_path)
     
-    print("Levenshtein távolság:", textdistance.levenshtein(input3, OCR.get_output()))
+    print("Levenshtein távolság:", textdistance.levenshtein(input2, OCR.get_output()))
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
