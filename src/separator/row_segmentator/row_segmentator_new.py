@@ -83,6 +83,6 @@ class RowSegmentatorNew(BaseRowSegmentator):
 
 
         util.calculate_spaces_length(rows)
-        return rows, rows_rect_image, rows_dilated, mask
+        return rows, rows_rect_image, rows_dilated, masks
         #cv2.imshow("dsadas", dilated)
         #cv2.waitKey(0)
