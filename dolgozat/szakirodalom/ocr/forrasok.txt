@@ -1,0 +1,2 @@
+OCR CNN Brahmi betűk: https://arxiv.org/html/2501.01981v1#S5
+https://en.wikipedia.org/wiki/Optical_character_recognition

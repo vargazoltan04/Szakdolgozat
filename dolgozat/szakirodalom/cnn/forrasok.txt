@@ -1,0 +1,2 @@
+tanitoadat: https://github.com/VeCAD-P04-UTM/94-Class-ASCII-Image-OCR-Data
+CNN: https://cs231n.github.io/convolutional-networks/
