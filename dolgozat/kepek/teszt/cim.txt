@@ -1,0 +1,5 @@
+Optikai karakter felismerés konvolúciós neurális hálózatokkal. 
+
+OCR története
+hálók áttekintése
+15-20 forrás
