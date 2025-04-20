@@ -51,6 +51,7 @@ def main(path, output_path):
     visualizer.plot_confusion_matrix(cm, labels, True, output_path)
     
     print("Levenshtein távolság:", textdistance.levenshtein(input4, OCR.get_output()))
+    print("Hasonlósági arány: ", util.char_by_char_similarity(visualizer.align_texts_levenshtein(input4, OCR.get_output())))
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()

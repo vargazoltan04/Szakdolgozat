@@ -127,3 +127,11 @@ def delete_small_components(image, min_size):
 
         image = np.where(labels > 0, image, 255).astype(np.uint8)
         return image
+
+def char_by_char_similarity(texts):
+    count = 0
+    for char_true, char_pred in texts:
+        if char_true == char_pred:
+            count += 1
+
+    return count / len(texts)
