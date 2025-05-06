@@ -36,6 +36,7 @@ class character:
         num_labels, labels = cv2.connectedComponents(self.inverted)
 
         if num_labels_vertical == 2 and num_labels_horizontal == 2 and num_labels >= 3:
+            #cv2.imwrite(r"C:\\Users\\Zoltan\\Desktop\\teszt\\bad_separation\\histogram_binary_" + str(self.row_num) + "_" + str(self.char_num) + ".png", self.char)
             return False
         
         return True
@@ -45,14 +46,18 @@ class character:
         output = []
         num_labels, labels, stats, centroids = cv2.connectedComponentsWithStats(self.inverted, connectivity=8)
 
+        image_boundingbox = cv2.cvtColor(self.char, cv2.COLOR_GRAY2RGB)
         for i in range(1, num_labels):
             x = stats[i, cv2.CC_STAT_LEFT]
             y = stats[i, cv2.CC_STAT_TOP]
             w = stats[i, cv2.CC_STAT_WIDTH]
             h = stats[i, cv2.CC_STAT_HEIGHT]
             #print(f"x: {x} y: {y} w: {w} h: {h}")
-            #cv2.rectangle(self.char, (x, y), (x+w, y+h), (255, 0, 0), 1)
 
+
+            image_boundingbox = cv2.rectangle(image_boundingbox, (x, y), (x + w - 1, y + h - 1), (0, 0, 255), 1)
+            cv2.imwrite(r"C:\\Users\\Zoltan\\Desktop\\teszt\\bad_separation_boundingbox\\histogram_binary_" + str(self.row_num) + "_" + str(self.char_num) + ".png", image_boundingbox)
+            
             temp_im = self.char[y:y+h, x:x+w]
 
             temp_char = character(temp_im, False, self.row_num, self.char_num + (i - 1))

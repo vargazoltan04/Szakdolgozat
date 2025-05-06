@@ -26,6 +26,7 @@ class ocr:
 
     def run(self):
         self.image = self.binarizer.binarize(self.image, 128)
+
         self.image = util.delete_small_components(self.image, 5)
         #self.rows, row_lines_red = self.row_separator.row_segmentation(self.image)
         self.rows, rows_rect_image, rows_dilated, masks = self.row_separator.row_segmentation(self.image)
