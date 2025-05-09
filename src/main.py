@@ -60,16 +60,27 @@ def main(path, output_path):
     y_pred = [p for t, p in aligned if t != "-"]
 
     # Compute metrics
-    precision = precision_score(y_true, y_pred, average='micro', zero_division=0)
-    recall = recall_score(y_true, y_pred, average='micro', zero_division=0)
-    f1 = f1_score(y_true, y_pred, average='micro', zero_division=0)
+    precision = precision_score(y_true, y_pred, average='macro', zero_division=0)
+    recall = recall_score(y_true, y_pred, average='macro', zero_division=0)
+    f1 = f1_score(y_true, y_pred, average='macro', zero_division=0)
     accuracy = accuracy_score(y_true, y_pred)
 
     print(type(precision), type(recall), type(f1), type(accuracy))
-    # Put into 2x2 matrix
-    metrics_matrix = np.array([[precision, recall], [f1, accuracy]])
-    
-    print(metrics_matrix)
+
+    metrics_matrix = np.array([precision, recall, f1, accuracy])
+    # Create the bar plot
+    plt.figure(figsize=(10, 6))
+    sns.barplot(x=["Precision", "Recall", "F1-Score", "Accuracy"], y=metrics_matrix, palette="viridis")
+    # Add labels and title
+    plt.title('Metrics for whole text')
+    plt.xlabel('Metrics')
+    plt.ylabel('Values')
+    plt.gca().set_ylim([0.8, 1])
+    # Show the plot
+    plt.xticks(rotation=0, ha='right')  # Rotate labels if needed
+    plt.tight_layout()  # Make sure everything fits
+    plt.savefig(output_path + '/metrics.png')
+
     report = classification_report(y_true, y_pred, output_dict=True, zero_division=0)
 
     # Extracting all precision values (including per-class, macro avg, and weighted avg)
