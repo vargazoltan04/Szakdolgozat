@@ -127,7 +127,7 @@ def main():
         correct += (predicted == labels).sum().item()
 
     # Save the model weights (state dictionary)
-    torch.save(model.state_dict(), 'model_weights.pth')
+    torch.save(model.state_dict(), 'model_weights_temp.pth')
     time = datetime.now().strftime("%H:%M:%S")
     print(f"{time}: Accuracy: {100 * correct / total}%")
 
