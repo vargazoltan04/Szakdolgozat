@@ -1,9 +1,8 @@
 from abc import ABC, abstractmethod
 from separator.visualizer.base_visualizer import BaseVisualizer
-from sklearn.metrics import confusion_matrix
+from sklearn.metrics import confusion_matrix, precision_score, recall_score, f1_score, accuracy_score, classification_report
 import matplotlib.pyplot as plt
 import seaborn as sns
-import string
 import numpy as np
 
 import Levenshtein
@@ -19,10 +18,10 @@ class Visualizer(BaseVisualizer):
    
     def visualize_confusion_matrix(self, labels, true, prediction, normalize = False):
         # 2. Konfúziós mátrix készítése
-        conf_matrix, labels = self.generate_confusion_matrix(labels, true, prediction, normalize)
+        conf_matrix, labels = self.generate_confusion_matrix(labels, true, prediction, True)
 
         # 3. Megjelenítés
-        self.plot_confusion_matrix(conf_matrix, labels, normalize)
+        self.plot_confusion_matrix(conf_matrix, labels, normalize, self.save_path + 'confusion_matrix.png')
 
     def align_texts_levenshtein(self, true, prediction):
         """Levenshtein távolság alapú karakterillesztés OCR hibákhoz."""
@@ -116,9 +115,77 @@ class Visualizer(BaseVisualizer):
         path = f"{save_path}/confusion_matrix.png"
         util.create_path(path)
         plt.savefig(path)
-        plt.show()
+        #plt.show()
+
+    def plot_metrics_F1_recall_accuracy_precision(self, true, pred):
+        aligned = self.align_texts_levenshtein(true, pred)
+
+        # Extract ground truth and prediction characters
+        y_true = [t for t, p in aligned if t != "-"]
+        y_pred = [p for t, p in aligned if t != "-"]
+
+        # Compute metrics
+        precision = precision_score(y_true, y_pred, average='macro', zero_division=0)
+        recall = recall_score(y_true, y_pred, average='macro', zero_division=0)
+        f1 = f1_score(y_true, y_pred, average='macro', zero_division=0)
+        accuracy = accuracy_score(y_true, y_pred)
+
+        metrics_matrix = np.array([precision, recall, f1, accuracy])
+        labels = ["Precision", "Recall", "F1-Score", "Accuracy"]
+        self.plot_metrics_together('metrics.png', 'Metrics for whole text', 'Metrics', 'Values', labels, metrics_matrix)
+        report = classification_report(y_true, y_pred, output_dict=True, zero_division=0)
+
+        # Extracting all precision values (including per-class, macro avg, and weighted avg)
+        precision_values = {label: report[label]['precision'] for label in report if label not in ['accuracy', 'macro avg', 'weighted avg']}
+        precision_values['\" \"'] = precision_values[' ']
+        del precision_values[' ']
+        labels = list(precision_values.keys())
+        precisions = list(precision_values.values())
+        self.plot_metric('precisions.png', 'Precision per Class', 'Classes', 'Precision', labels, precisions)
+
+        # Extracting all precision values (including per-class, macro avg, and weighted avg)
+        recall_values = {label: report[label]['recall'] for label in report if label not in ['accuracy', 'macro avg', 'weighted avg']}
+        recall_values['\" \"'] = recall_values[' ']
+        del recall_values[' ']
+        labels = list(recall_values.keys())
+        recalls = list(recall_values.values())
+        self.plot_metric('recalls.png', 'Recall per Class', 'Classes', 'Recall', labels, recalls)
+
+        # Extracting all precision values (including per-class, macro avg, and weighted avg)
+        f1_values = {label: report[label]['f1-score'] for label in report if label not in ['accuracy', 'macro avg', 'weighted avg']}
+        f1_values['\" \"'] = f1_values[' ']
+        del f1_values[' ']
+        labels = list(f1_values.keys())
+        f1_scores = list(f1_values.values())
+        self.plot_metric('f1_values.png', 'F1-Score per Class', 'Classes', 'F1-Score', labels, f1_scores)
 
 
+    def plot_metric(self, name, title, xlabel, ylabel, labels, data):
+        plt.figure(figsize=(10, 6))
+        sns.barplot(x=labels, y=data, palette='viridis')
+        # Add labels and title
+        plt.title(title)
+        plt.xlabel(xlabel)
+        plt.ylabel(ylabel)
+        # Show the plot
+        plt.xticks(rotation=0, ha='right')  # Rotate labels if needed
+        plt.tight_layout()  # Make sure everything fits
+        plt.savefig(self.save_path + '/' + name)
+        print(self.save_path + '/' + name)
+
+    def plot_metrics_together(self, name, title, xlabel, ylabel, labels, data):
+        # Create the bar plot
+        plt.figure(figsize=(10, 6))
+        sns.barplot(x=labels, y=data, palette="viridis")
+        # Add labels and title
+        plt.title(title)
+        plt.xlabel(xlabel)
+        plt.ylabel(ylabel)
+        plt.gca().set_ylim([0.8, 1])
+        # Show the plot
+        plt.xticks(rotation=0, ha='right')  # Rotate labels if needed
+        plt.tight_layout()  # Make sure everything fits
+        plt.savefig(self.save_path + '/metrics.png')
 
      
      

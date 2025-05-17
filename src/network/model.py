@@ -41,12 +41,14 @@ class VGG16(nn.Module):
             nn.ReLU()
         )
 
+        #16x16x256
         self.layer6 = nn.Sequential(
             nn.Conv2d(256, 256, kernel_size=3, stride=1, padding=1),
             nn.BatchNorm2d(256),
             nn.ReLU()
         )
 
+        #16x16x256
         self.layer7 = nn.Sequential(
             nn.Conv2d(256, 256, kernel_size=3, stride=1, padding=1),
             nn.BatchNorm2d(256),
@@ -54,18 +56,21 @@ class VGG16(nn.Module):
             nn.MaxPool2d(kernel_size=2, stride=2)
         )
 
+        #8x8x512
         self.layer8 = nn.Sequential(
             nn.Conv2d(256, 512, kernel_size=3, stride=1, padding=1),
             nn.BatchNorm2d(512),
             nn.ReLU()
         )
 
+        #8x8x512
         self.layer9 = nn.Sequential(
             nn.Conv2d(512, 512, kernel_size=3, stride=1, padding=1),
             nn.BatchNorm2d(512),
             nn.ReLU()
         )
 
+        #8x8x512
         self.layer10 = nn.Sequential(
             nn.Conv2d(512, 512, kernel_size=3, stride=1, padding=1),
             nn.BatchNorm2d(512),
@@ -73,18 +78,21 @@ class VGG16(nn.Module):
             nn.MaxPool2d(kernel_size=2, stride=2)
         )
 
+        #4x4x512
         self.layer11 = nn.Sequential(
             nn.Conv2d(512, 512, kernel_size=3, stride=1, padding=1),
             nn.BatchNorm2d(512),
             nn.ReLU()
         )
 
+        #4x4x512
         self.layer12 = nn.Sequential(
             nn.Conv2d(512, 512, kernel_size=3, stride=1, padding=1),
             nn.BatchNorm2d(512),
             nn.ReLU()
         )
 
+        #4x4x512
         self.layer13 = nn.Sequential(
             nn.Conv2d(512, 512, kernel_size=3, stride=1, padding=1),
             nn.BatchNorm2d(512),
@@ -92,18 +100,21 @@ class VGG16(nn.Module):
             nn.MaxPool2d(kernel_size = 2, stride = 2)
         )
 
+        #1x1x2048
         self.fc1 = nn.Sequential(
             nn.Dropout(0.5),
             nn.Linear(2 * 2 * 512, 2048),
             nn.ReLU()
         )
 
+        #1x1x2048
         self.fc2 = nn.Sequential(
             nn.Dropout(0.5),
             nn.Linear(2 * 2 * 512, 1024),
             nn.ReLU()
         )
 
+        #1x1x1024
         self.fc3 = nn.Sequential(
             nn.Linear(1024, num_classes)
         )

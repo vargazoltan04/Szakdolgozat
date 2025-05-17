@@ -12,7 +12,7 @@ from pathlib import Path
 
 from separator import *
 from separator.row_segmentator.row_segmentator_new import RowSegmentatorNew
-from sklearn.metrics import precision_score, recall_score, f1_score, accuracy_score, classification_report
+
 from util import util
 
 from network.model import VGG16
@@ -39,115 +39,17 @@ def main(path, output_path):
     row_segmentator = RowSegmentatorNew()
     letter_segmentator = LetterSegmentator()
     resizer = Resizer(45)
-    visualizer: BaseVisualizer = Visualizer("../images/output/")
-    labels = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!?.,-: "
+    visualizer: BaseVisualizer = Visualizer(output_path)
 
 
     OCR = ocr.ocr(binarizer, cleaner, row_segmentator, letter_segmentator, resizer, recognizer, path, output_path)
     OCR.run()
     output = OCR.get_output()
-    similarity = util.char_by_char_similarity(visualizer.align_texts_levenshtein(input4, OCR.get_output()))
-    
-
-
-    true_text = input4
-    predicted_text = OCR.get_output()
-
-    aligned = visualizer.align_texts_levenshtein(true_text, predicted_text)
-
-    # Extract ground truth and prediction characters
-    y_true = [t for t, p in aligned if t != "-"]
-    y_pred = [p for t, p in aligned if t != "-"]
-
-    # Compute metrics
-    precision = precision_score(y_true, y_pred, average='macro', zero_division=0)
-    recall = recall_score(y_true, y_pred, average='macro', zero_division=0)
-    f1 = f1_score(y_true, y_pred, average='macro', zero_division=0)
-    accuracy = accuracy_score(y_true, y_pred)
-
-    print(type(precision), type(recall), type(f1), type(accuracy))
-
-    metrics_matrix = np.array([precision, recall, f1, accuracy])
-    # Create the bar plot
-    plt.figure(figsize=(10, 6))
-    sns.barplot(x=["Precision", "Recall", "F1-Score", "Accuracy"], y=metrics_matrix, palette="viridis")
-    # Add labels and title
-    plt.title('Metrics for whole text')
-    plt.xlabel('Metrics')
-    plt.ylabel('Values')
-    plt.gca().set_ylim([0.8, 1])
-    # Show the plot
-    plt.xticks(rotation=0, ha='right')  # Rotate labels if needed
-    plt.tight_layout()  # Make sure everything fits
-    plt.savefig(output_path + '/metrics.png')
-
-    report = classification_report(y_true, y_pred, output_dict=True, zero_division=0)
-
-    # Extracting all precision values (including per-class, macro avg, and weighted avg)
-    precision_values = {label: report[label]['precision'] for label in report if label not in ['accuracy', 'macro avg', 'weighted avg']}
-    precision_values['\" \"'] = precision_values[' ']
-    del precision_values[' ']
-
-    # Convert dictionary to lists for plotting
-    labels = list(precision_values.keys())
-
-    precisions = list(precision_values.values())
-    # Create the bar plot
-    plt.figure(figsize=(10, 6))
-    sns.barplot(x=labels, y=precisions, palette="viridis")
-    # Add labels and title
-    plt.title('Precision per Class')
-    plt.xlabel('Classes')
-    plt.ylabel('Precision')
-    # Show the plot
-    plt.xticks(rotation=0, ha='right')  # Rotate labels if needed
-    plt.tight_layout()  # Make sure everything fits
-    plt.savefig(output_path + '/precisions.png')
-
-    # Extracting all precision values (including per-class, macro avg, and weighted avg)
-    recall_values = {label: report[label]['recall'] for label in report if label not in ['accuracy', 'macro avg', 'weighted avg']}
-    recall_values['\" \"'] = recall_values[' ']
-    del recall_values[' ']
-    # Convert dictionary to lists for plotting
-    labels = list(recall_values.keys())
-
-    precisions = list(recall_values.values())
-    # Create the bar plot
-    plt.figure(figsize=(10, 6))
-    sns.barplot(x=labels, y=precisions, palette="viridis")
-    # Add labels and title
-    plt.title('Recall per Class')
-    plt.xlabel('Classes')
-    plt.ylabel('Recall')
-    # Show the plot
-    plt.xticks(rotation=0, ha='right')  # Rotate labels if needed
-    plt.tight_layout()  # Make sure everything fits
-    plt.savefig(output_path + '/recalls.png')
-
-        # Extracting all precision values (including per-class, macro avg, and weighted avg)
-    f1_values = {label: report[label]['f1-score'] for label in report if label not in ['accuracy', 'macro avg', 'weighted avg']}
-    f1_values['\" \"'] = f1_values[' ']
-    del f1_values[' ']
-    # Convert dictionary to lists for plotting
-    labels = list(f1_values.keys())
-
-
-    precisions = list(f1_values.values())
-    # Create the bar plot
-    plt.figure(figsize=(10, 6))
-    sns.barplot(x=labels, y=precisions, palette="viridis")
-    # Add labels and title
-    plt.title('F1-score per Class')
-    plt.xlabel('Classes')
-    plt.ylabel('F1-score')
-    # Show the plot
-    plt.xticks(rotation=0, ha='right')  # Rotate labels if needed
-    plt.tight_layout()  # Make sure everything fits
-    plt.savefig(output_path + '/f1scores.png')
     
     labels = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!?.,-: "
     cm = visualizer.generate_confusion_matrix(labels, input4, output, True)
     visualizer.plot_confusion_matrix(cm, labels, True, output_path)
+    visualizer.plot_metrics_F1_recall_accuracy_precision(input4, output)
 
     print("Levenshtein távolság:", textdistance.levenshtein(input4, OCR.get_output()))
     print("Hasonlósági arány: ", util.char_by_char_similarity(visualizer.align_texts_levenshtein(input4, OCR.get_output())))
