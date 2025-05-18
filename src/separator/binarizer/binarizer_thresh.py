@@ -4,6 +4,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 class BinarizerThresh(BaseBinarizer):
+    def __init__(self, debug):
+        self.debug = debug
+
     def binarize(self, image, thresh):
         _, bin_image = cv2.threshold(image, thresh, 255, cv2.THRESH_BINARY)
 

@@ -9,7 +9,7 @@ import PIL.Image as Image
 
 
 class Recognizer(BaseRecognizer):
-     def __init__(self, output_num, model_path, mapping_json):
+     def __init__(self, output_num, model_path, mapping_json, debug):
           with open(mapping_json, 'r') as json_file:
                self.index_class_mapping = json.load(json_file)
 
@@ -22,6 +22,8 @@ class Recognizer(BaseRecognizer):
                transforms.Resize((64, 64)),       # Resize images to 64x64
                transforms.ToTensor(),             # Convert images to tensor
           ])
+
+          self.debug = debug
 
      def recognize(self, letter):
           _, predicted_class = torch.max(self.model(self.transform(Image.fromarray(letter.char)).unsqueeze(0)), 1)

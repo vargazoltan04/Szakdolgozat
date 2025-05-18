@@ -5,6 +5,9 @@ from abc import ABC, abstractmethod
 from .base_cleaner import BaseCleaner
 
 class Cleaner(BaseCleaner):
+    def __init__(self, debug):
+        self.debug = debug
+        
     def delete_small_components(self, image, min_size):
         image_inverted = cv2.bitwise_not(image)
         num_labels, labels = cv2.connectedComponents(image_inverted)

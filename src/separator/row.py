@@ -4,18 +4,20 @@ import numpy as np
 import cv2
 
 class row:
-    def __init__(self, row, avg, row_num):
+    def __init__(self, row, avg, row_num, debug=False):
         self.row = row
         self.row_num = row_num
         self.letters: character = []
 
         self.avg = avg
         self.offset = 0
+        self.debug=debug
 
     def save_row(self, path):
         path = f"{path}/row{self.row_num}.png"
         util.create_path(path)
-        cv2.imwrite(path, self.row)
+        if self.debug:
+            cv2.imwrite(path, self.row)
     
     def save_letters(self, path):
         for i in range(len(self.letters)):

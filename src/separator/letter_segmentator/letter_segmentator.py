@@ -9,6 +9,9 @@ from separator.letter_segmentator.base_letter_segmentator import BaseLetterSegme
 from util import util
 
 class LetterSegmentator(BaseLetterSegmentator):
+    def __init__(self, debug):
+        self.debug = debug
+
     def letter_segmentation(self, row):
         output = []
         vertical_projection = util.vertical_projection(row.row)
@@ -41,7 +44,7 @@ class LetterSegmentator(BaseLetterSegmentator):
             letter_trimmed = letter[:, non_white_cols]  #Levágja az üres oszlopokat
   
             white_cols_count = len(non_white_cols[non_white_cols == False]) ## A szóközökhoz kell. Ha nagyobb mint az átlag, van szóköz
-            char: character = character.character(letter_trimmed, white_cols_count > row.avg, row.row_num, offset + i - 1)
+            char: character = character.character(letter_trimmed, white_cols_count > row.avg, row.row_num, offset + i - 1, self.debug)
             #print("dsadas", char.row_num, char.char_num, char.char.shape)
 
             if char.char.shape[0] == 0 or char.char.shape[1] == 0:

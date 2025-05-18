@@ -13,8 +13,9 @@ from collections import defaultdict
 from util import util
 
 class Visualizer(BaseVisualizer):
-    def __init__(self, save_path):
-         self.save_path = save_path
+    def __init__(self, save_path, debug):
+        self.save_path = save_path
+        self.debug = debug
    
     def visualize_confusion_matrix(self, labels, true, prediction, normalize = False):
         # 2. Konfúziós mátrix készítése

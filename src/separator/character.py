@@ -3,7 +3,7 @@ import numpy as np
 import cv2
 
 class character:
-    def __init__(self, char, space_after, row_num, char_num):
+    def __init__(self, char, space_after, row_num, char_num, debug):
         inverted = cv2.bitwise_not(char) ##Megkeresi a betűnek a befoglaló téglalapját 
         coords = cv2.findNonZero(inverted)
         x, y, w, h = cv2.boundingRect(coords)
@@ -15,6 +15,7 @@ class character:
         self.row_num = row_num
         self.char_num = char_num
         self.space_after = space_after
+        self.debug = debug
 
     def save_letter(self, path):
         path = f"{path}/row{self.row_num}_letter{self.char_num}.png"
@@ -22,7 +23,8 @@ class character:
         if self.char.shape[0] == 0 or self.char.shape[1] == 0:
             return
 
-        cv2.imwrite(path, self.char)
+        if self.debug:
+            cv2.imwrite(path, self.char)
 
     def is_correct_letter(self):
         horizontal_projection_letter = util.horizontal_projection(self.char)
@@ -36,7 +38,8 @@ class character:
         num_labels, labels = cv2.connectedComponents(self.inverted)
 
         if num_labels_vertical == 2 and num_labels_horizontal == 2 and num_labels >= 3:
-            #cv2.imwrite(r"C:\\Users\\Zoltan\\Desktop\\teszt\\bad_separation\\histogram_binary_" + str(self.row_num) + "_" + str(self.char_num) + ".png", self.char)
+            if self.debug:
+                cv2.imwrite(r"C:\\Users\\Zoltan\\Desktop\\teszt\\bad_separation\\histogram_binary_" + str(self.row_num) + "_" + str(self.char_num) + ".png", self.char)
             return False
         
         return True
@@ -56,11 +59,13 @@ class character:
 
 
             image_boundingbox = cv2.rectangle(image_boundingbox, (x, y), (x + w - 1, y + h - 1), (0, 0, 255), 1)
-            cv2.imwrite(r"C:\\Users\\Zoltan\\Desktop\\teszt\\bad_separation_boundingbox\\histogram_binary_" + str(self.row_num) + "_" + str(self.char_num) + ".png", image_boundingbox)
+            
+            if self.debug:
+                cv2.imwrite(r"C:\\Users\\Zoltan\\Desktop\\teszt\\bad_separation_boundingbox\\histogram_binary_" + str(self.row_num) + "_" + str(self.char_num) + ".png", image_boundingbox)
             
             temp_im = self.char[y:y+h, x:x+w]
 
-            temp_char = character(temp_im, False, self.row_num, self.char_num + (i - 1))
+            temp_char = character(temp_im, False, self.row_num, self.char_num + (i - 1), self.debug)
             output.append(temp_char)
         
 

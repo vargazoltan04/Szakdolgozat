@@ -4,7 +4,11 @@ import numpy as np
 import cv2
 
 class Resizer(BaseResizer):
-    def resize(self, char, scale):
+     def __init__(self, target_char_size, debug):
+         self.target_char_size = target_char_size
+         self.debug = debug
+
+     def resize(self, char, scale):
           original_height, original_width = char.char.shape
 
           if original_width == 0 or original_height == 0:

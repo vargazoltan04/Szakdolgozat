@@ -11,7 +11,7 @@ from separator.resizer.base_resizer import BaseResizer
 from separator.recognizer.base_recognizer import BaseRecognizer
 
 class ocr:
-    def __init__(self, binarizer: BaseBinarizer, cleaner: BaseCleaner, row_separator: BaseRowSegmentator, letter_separator: BaseLetterSegmentator, resizer: BaseResizer, recognizer: BaseRecognizer, image_path, save_path):
+    def __init__(self, binarizer: BaseBinarizer, cleaner: BaseCleaner, row_separator: BaseRowSegmentator, letter_separator: BaseLetterSegmentator, resizer: BaseResizer, recognizer: BaseRecognizer, image_path, save_path, debug):
         self.binarizer = binarizer
         self.cleaner = cleaner
         self.row_separator = row_separator
@@ -23,6 +23,7 @@ class ocr:
         self.save_path = save_path
         self.rows: row = []
         self.output = ""
+        self.debug = debug
 
     def run(self):
         self.image = self.binarizer.binarize(self.image, 128)
@@ -32,7 +33,9 @@ class ocr:
         self.rows, rows_rect_image, rows_dilated, masks = self.row_separator.row_segmentation(self.image)
         for i in range(len(self.rows)):
             self.rows[i].letters, letter_lines_red = self.letter_separator.letter_segmentation(self.rows[i])
-            self.saveim(letter_lines_red, f"/rows_lined/row_lined{i}.png")
+            
+            if self.debug:
+                self.saveim(letter_lines_red, f"/rows_lined/row_lined{i}.png")
 
         scale = util.calculate_resize_scale(self.rows, self.resizer.target_char_size)
         for row in self.rows:
@@ -49,13 +52,15 @@ class ocr:
             
             self.output += " "
 
-        self.save_rows(f"{self.save_path}/rows")
-        self.save_letters(f"{self.save_path}/letters")
         self.save_output("output.txt")
-        #self.saveim(row_lines_red, "row_lines_red.png")
-        self.saveim(rows_rect_image, "rows_bounding_rects.png")
-        self.saveim(rows_dilated, "rows_dilated.png")
-        self.saveim(masks[1], "row_mask.png")
+        if self.debug:
+            self.save_rows(f"{self.save_path}/rows")
+            self.save_letters(f"{self.save_path}/letters")
+            
+            #self.saveim(row_lines_red, "row_lines_red.png")
+            self.saveim(rows_rect_image, "rows_bounding_rects.png")
+            self.saveim(rows_dilated, "rows_dilated.png")
+            self.saveim(masks[1], "row_mask.png")
 
         return self
 
@@ -66,7 +71,8 @@ class ocr:
     def saveim(self, image, file_name):
         path = f"{self.save_path}/{file_name}"
         util.create_path(path)
-        cv2.imwrite(path, image)
+        if self.debug:
+            cv2.imwrite(path, image)
         return self
     
     def save_rows(self, file_name):

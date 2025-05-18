@@ -32,39 +32,41 @@ Lorem, ipsum dolor sit amet consectetur adipisicing elit. Recusandae aut quisqua
 
 
 
-def main(path, output_path):
-    recognizer = Recognizer(58, "./network/model_weights_58_15-35-55_kisnagybetu.pth", "./network/index_class_mapping.json")
-    binarizer = BinarizerThresh()
-    cleaner = Cleaner()
-    row_segmentator = RowSegmentatorNew()
-    letter_segmentator = LetterSegmentator()
-    resizer = Resizer(45)
-    visualizer: BaseVisualizer = Visualizer(output_path)
+def main(path, output_path, debug):
+    recognizer = Recognizer(58, "./network/model_weights_58_15-35-55_kisnagybetu.pth", "./network/index_class_mapping.json", debug)
+    binarizer = BinarizerThresh(debug)
+    cleaner = Cleaner(debug)
+    row_segmentator = RowSegmentatorNew(debug)
+    letter_segmentator = LetterSegmentator(debug)
+    resizer = Resizer(45, debug)
+    visualizer: BaseVisualizer = Visualizer(output_path, debug)
 
 
-    OCR = ocr.ocr(binarizer, cleaner, row_segmentator, letter_segmentator, resizer, recognizer, path, output_path)
+    OCR = ocr.ocr(binarizer, cleaner, row_segmentator, letter_segmentator, resizer, recognizer, path, output_path, debug)
     OCR.run()
     output = OCR.get_output()
     
     labels = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!?.,-: "
-    cm = visualizer.generate_confusion_matrix(labels, input4, output, True)
-    visualizer.plot_confusion_matrix(cm, labels, True, output_path)
-    visualizer.plot_metrics_F1_recall_accuracy_precision(input4, output)
+    if debug:
+        cm = visualizer.generate_confusion_matrix(labels, input4, output, True)
+        visualizer.plot_confusion_matrix(cm, labels, True, output_path)
+        visualizer.plot_metrics_F1_recall_accuracy_precision(input4, output)
 
-    print("Levenshtein távolság:", textdistance.levenshtein(input4, OCR.get_output()))
-    print("Hasonlósági arány: ", util.char_by_char_similarity(visualizer.align_texts_levenshtein(input4, OCR.get_output())))
+        print("Levenshtein távolság:", textdistance.levenshtein(input4, OCR.get_output()))
+        print("Hasonlósági arány: ", util.char_by_char_similarity(visualizer.align_texts_levenshtein(input4, OCR.get_output())))
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("-p", "--path", help = "The path of the image")
     parser.add_argument("-op", "--output_path", help = "The output path of the result")
+    parser.add_argument('--debug', action='store_true', help='Debug mód bekapcsolása')
     args = parser.parse_args()
 
     if args.path and args.output_path:
         print("The input image: %s" % args.path)
         print("The output path: %s" % args.output_path)
         util.create_path(args.output_path)
-        main(args.path, args.output_path)
+        main(args.path, args.output_path, args.debug)
     elif args.path and not args.output_path:
         print("The input image: %s" % args.path)
         print("The output path: %s" % args.path)
@@ -72,7 +74,7 @@ if __name__ == "__main__":
 
         path_obj = Path(args.path)
         if path_obj.suffix:
-            main(args.path, path_obj.parent)
+            main(args.path, path_obj.parent, args.debug)
         else:
             print("Give me an input image!")
     else:

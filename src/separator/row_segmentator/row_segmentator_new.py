@@ -9,6 +9,8 @@ from util import util
 from separator import row
 
 class RowSegmentatorNew(BaseRowSegmentator):
+    def __init__(self, debug):
+        self.debug = debug
     #Képen a sorok szegmentálása
     def row_segmentation(self, image):
         kernel = np.ones((10, 40), np.uint8) 
@@ -78,7 +80,7 @@ class RowSegmentatorNew(BaseRowSegmentator):
             x, y, w, h = cv2.boundingRect(letter_pixels)
             
             row_image = row_image[y:y+h, x:x+w] #Kivágja a szöveget belőle
-            row_im: row = row.row(row_image, 0, i - 1)
+            row_im: row = row.row(row_image, 0, i - 1, self.debug)
             rows.append(row_im)
 
 
