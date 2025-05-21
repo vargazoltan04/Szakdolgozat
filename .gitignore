@@ -7,6 +7,11 @@ images/output/*
 train_data
 __pycache__/
 src/network/model_weights*
+src/Lib
+src/Include
+src/Scripts
+src/share
+src/pyvenv.cfg
 jegyzet.txt
 temp/*
 dolgozat/alairas.*
